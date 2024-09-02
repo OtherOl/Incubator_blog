@@ -249,12 +249,12 @@ export class PairQuizGameQueryRepository {
     };
   }
 
-  async getTopPlayers(pageNumber: number = 1, pageSize: number = 10, sort: string | string[]) {
+  async getTopPlayers(pageNumber: number, pageSize: number, sort: string | string[]) {
     const queryTopUsers: SelectQueryBuilder<PlayerEntity> = await this.playerRepository
       .createQueryBuilder('p')
       .select([
         'COALESCE(Sum(p.score), 0)::INTEGER as "sumScore"',
-        'COALESCE(AVG(p.score), 0)::FLOAT as "avgScores"',
+        'ROUND(COALESCE(AVG(p.score), 0), 2)::FLOAT as "avgScores"',
         'COALESCE(Sum(p.gamesCount), 0)::INTEGER as "gamesCount"',
         'COALESCE(Sum(p.winsCount), 0)::INTEGER as "winsCount"',
         'COALESCE(Sum(p.lossesCount), 0)::INTEGER as "lossesCount"',
@@ -262,6 +262,12 @@ export class PairQuizGameQueryRepository {
         'p.player as player',
       ])
       .groupBy('p.player');
+
+    const countUsers: PlayerEntity[] = await this.playerRepository
+      .createQueryBuilder('p')
+      .select('p.player as player')
+      .groupBy('p.player')
+      .getRawMany();
 
     let topUsers: PlayerEntity[];
     if (Array.isArray(sort)) {
@@ -283,10 +289,10 @@ export class PairQuizGameQueryRepository {
     }
 
     return {
-      pagesCount: Math.ceil(topUsers.length / pageSize),
-      page: (pageNumber - 1) * pageSize,
+      pagesCount: Math.ceil(countUsers.length / pageSize),
+      page: pageNumber,
       pageSize: pageSize,
-      totalCount: topUsers.length,
+      totalCount: countUsers.length,
       items: topUsers,
     };
   }

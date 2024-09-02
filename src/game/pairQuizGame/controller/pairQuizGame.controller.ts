@@ -94,6 +94,10 @@ export class PairQuizGameController {
   @Get('users/top')
   @HttpCode(200)
   async getTopPlayers(@Query() query: { sort: string | string[]; pageNumber: number; pageSize: number }) {
-    return await this.getTopPlayersUseCase.getTopPlayers(query.sort, query.pageNumber, query.pageSize);
+    return await this.getTopPlayersUseCase.getTopPlayers(
+      query.sort,
+      query.pageNumber ? +query.pageNumber : 1,
+      query.pageSize ? +query.pageSize : 10,
+    );
   }
 }

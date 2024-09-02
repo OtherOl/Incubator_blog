@@ -7,8 +7,8 @@ export class GetTopPlayersUseCase {
 
   async getTopPlayers(
     inputSort: string | string[] = ['avgScores DESC', 'sumScore DESC'],
-    pageNumber: number = 1,
-    pageSize: number = 10,
+    pageNumber: number,
+    pageSize: number,
   ) {
     return await this.pairQuizGameQueryRepository.getTopPlayers(pageNumber, pageSize, inputSort);
   }
