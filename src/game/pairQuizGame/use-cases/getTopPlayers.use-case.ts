@@ -1,24 +1,15 @@
 import { Injectable } from '@nestjs/common';
-import { SelectQueryBuilder } from 'typeorm';
-import { sortDirectionHelper } from '../../../base/helpers/sortDirection.helper';
+import { PairQuizGameQueryRepository } from '../repositories/pairQuizGame.query-repository';
 
 @Injectable()
 export class GetTopPlayersUseCase {
-  constructor() {}
+  constructor(private pairQuizGameQueryRepository: PairQuizGameQueryRepository) {}
 
   async getTopPlayers(
     inputSort: string | string[] = ['avgScores DESC', 'sumScore DESC'],
     pageNumber: number = 1,
     pageSize: number = 10,
   ) {
-    //   const sorts = Array.isArray(inputSort) ? inputSort : [inputSort];
-    //
-    //   const queryBuilder: SelectQueryBuilder<> = this.gameRepository.createQueryBuilder();
-    //   sorts.forEach((sort) => {
-    //     const fieldName = sort.split(' ')[0];
-    //     const sortDirection = sortDirectionHelper(sort.split(' ')[1]);
-    //     queryBuilder.orderBy(fieldName, sortDirection);
-    //   });
-    //   return await queryBuilder.getMany();
+    return await this.pairQuizGameQueryRepository.getTopPlayers(pageNumber, pageSize, inputSort);
   }
 }

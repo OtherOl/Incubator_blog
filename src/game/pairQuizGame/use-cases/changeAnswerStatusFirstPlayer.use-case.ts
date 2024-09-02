@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PairQuizGameQueryRepository } from '../repositories/pairQuizGame.query-repository';
 import { PairQuizGameRepository } from '../repositories/pairQuizGame.repository';
-import { QuestionsViewModel } from '../../../base/types/game.model';
+import { QuestionsViewModel } from '../../../common/types/game.model';
 
 @Injectable()
 export class ChangeAnswerStatusFirstPlayerUseCase {

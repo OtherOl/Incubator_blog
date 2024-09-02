@@ -1,5 +1,5 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
-import { AnswerStatus, QuestionsViewModel } from '../../../base/types/game.model';
+import { AnswerStatus, QuestionsViewModel } from '../../../common/types/game.model';
 import { Answer } from '../domain/answers.entity';
 import { PairQuizGameRepository } from '../repositories/pairQuizGame.repository';
 import { QuizQuestionsQueryRepository } from '../../quizQuestions/repositories/quizQuestions.query-repository';

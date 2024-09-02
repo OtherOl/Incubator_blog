@@ -1,11 +1,11 @@
 import { Body, Controller, Delete, Get, HttpCode, Param, Put, Req, UseGuards } from '@nestjs/common';
 import { CommentsQueryRepository } from '../repositories/comments.query-repository';
-import { SendLikes } from '../../base/types/likes.model';
+import { SendLikes } from '../../common/types/likes.model';
 import { Request } from 'express';
 import { AuthService } from '../../auth/application/auth.service';
 import { SkipThrottle } from '@nestjs/throttler';
 import { AccessTokenGuard } from '../../auth/guards/accessToken.guard';
-import { createCommentModel } from '../../base/types/comments.model';
+import { createCommentModel } from '../../common/types/comments.model';
 import { UpdateCommentUseCase } from '../use-cases/updateComment.use-case';
 import { DoLikesUseCase } from '../use-cases/doLikes.use-case';
 import { DeleteCommentUseCase } from '../use-cases/deleteComment.use-case';

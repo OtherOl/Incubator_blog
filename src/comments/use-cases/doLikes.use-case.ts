@@ -3,7 +3,7 @@ import { LikesQueryRepository } from '../../likes/repositories/likes.query-repos
 import { LikesService } from '../../likes/application/likes.service';
 import { CommentsRepository } from '../repositories/comments.repository';
 import { LikesRepository } from '../../likes/repositories/likes.repository';
-import { CommentViewModel } from '../../base/types/comments.model';
+import { CommentViewModel } from '../../common/types/comments.model';
 import { UsersQueryRepository } from '../../users/repositories/users.query-repository';
 
 @Injectable()

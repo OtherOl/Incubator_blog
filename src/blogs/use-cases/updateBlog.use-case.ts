@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { BlogsRepository } from '../repositories/blogs.repository';
-import { createBlogModel } from '../../base/types/blogs.model';
+import { createBlogModel } from '../../common/types/blogs.model';
 import { BlogsQueryRepository } from '../repositories/blogs.query-repository';
 
 @Injectable()

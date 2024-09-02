@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { AuthService } from '../../auth/application/auth.service';
 import { SecurityRepository } from '../repositories/security.repository';
-import { securityViewModel } from '../../base/types/security.model';
+import { securityViewModel } from '../../common/types/security.model';
 import { Security } from '../domain/security.entity';
 
 @Injectable()

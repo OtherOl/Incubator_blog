@@ -3,7 +3,7 @@ import { UsersQueryRepository } from '../../users/repositories/users.query-repos
 import { UsersRepository } from '../../users/repositories/users.repository';
 import { EmailManager } from '../../email/emailManager';
 import { v4 as uuidv4 } from 'uuid';
-import { resendConfirmation } from '../../base/types/users.model';
+import { resendConfirmation } from '../../common/types/users.model';
 
 @Injectable()
 export class ResendConfirmationUseCase {

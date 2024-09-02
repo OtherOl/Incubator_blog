@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { blogViewModel } from '../../base/types/blogs.model';
-import { paginationModel } from '../../base/types/pagination.model';
+import { blogViewModel } from '../../common/types/blogs.model';
+import { paginationModel } from '../../common/types/pagination.model';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Blog } from '../domain/blogs.entity';
-import { sortDirectionHelper } from '../../base/helpers/sortDirection.helper';
+import { sortDirectionHelper } from '../../common/helpers/sortDirection.helper';
 
 @Injectable()
 export class BlogsQueryRepository {

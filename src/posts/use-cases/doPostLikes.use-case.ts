@@ -4,7 +4,7 @@ import { LikesRepository } from '../../likes/repositories/likes.repository';
 import { LikesService } from '../../likes/application/likes.service';
 import { PostsRepository } from '../repositories/posts.repository';
 import { UsersQueryRepository } from '../../users/repositories/users.query-repository';
-import { postModel } from '../../base/types/posts.model';
+import { postModel } from '../../common/types/posts.model';
 
 @Injectable()
 export class DoPostLikesUseCase {

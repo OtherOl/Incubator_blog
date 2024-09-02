@@ -1,9 +1,9 @@
 import { INestApplication } from '@nestjs/common';
 import request from 'supertest';
 import { beforeGetAppAndCleanDb, blogModel, postCreateModel, userCreateModel } from './utils/test-utils';
-import { blogViewModel } from '../src/base/types/blogs.model';
-import { postModel } from '../src/base/types/posts.model';
-import { userModel } from '../src/base/types/users.model';
+import { blogViewModel } from '../src/common/types/blogs.model';
+import { postModel } from '../src/common/types/posts.model';
+import { userModel } from '../src/common/types/users.model';
 import { beforeAll, describe, expect, it } from '@jest/globals';
 
 jest.setTimeout(20000);

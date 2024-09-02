@@ -1,7 +1,7 @@
 import { Body, Controller, Delete, Get, HttpCode, Param, Post, Put, Query, UseGuards } from '@nestjs/common';
 import { BasicAuthGuard } from '../../../auth/guards/basic-auth.guard';
 import { QuizQuestionsQueryRepository } from '../repositories/quizQuestions.query-repository';
-import { CreateQuestionModel, UpdatePublished } from '../../../base/types/game.model';
+import { CreateQuestionModel, UpdatePublished } from '../../../common/types/game.model';
 import { CreateQuizQuestionsUseCase } from '../use-cases/createQuizQuestions.use-case';
 import { DeleteQuestionByIdUseCase } from '../use-cases/deleteQuestionById.use-case';
 import { UpdateQuestionUseCase } from '../use-cases/updateQuestion.use-case';

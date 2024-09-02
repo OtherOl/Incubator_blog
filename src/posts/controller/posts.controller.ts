@@ -12,10 +12,10 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { PostsQueryRepository } from '../repositories/posts.query-repository';
-import { createCommentModel } from '../../base/types/comments.model';
+import { createCommentModel } from '../../common/types/comments.model';
 import { Request } from 'express';
 import { AuthService } from '../../auth/application/auth.service';
-import { SendLikes } from '../../base/types/likes.model';
+import { SendLikes } from '../../common/types/likes.model';
 import { SkipThrottle } from '@nestjs/throttler';
 import { AccessTokenGuard } from '../../auth/guards/accessToken.guard';
 import { CreateCommentUseCase } from '../use-cases/createComment.use-case';

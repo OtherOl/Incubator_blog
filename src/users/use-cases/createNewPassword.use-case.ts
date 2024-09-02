@@ -2,7 +2,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { UsersRepository } from '../repositories/users.repository';
 import { UsersQueryRepository } from '../repositories/users.query-repository';
 import { AuthService } from '../../auth/application/auth.service';
-import { createNewPassword } from '../../base/types/users.model';
+import { createNewPassword } from '../../common/types/users.model';
 
 @Injectable()
 export class CreateNewPasswordUseCase {

@@ -12,9 +12,9 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { BlogsQueryRepository } from '../repositories/blogs.query-repository';
-import { createBlogModel } from '../../base/types/blogs.model';
+import { createBlogModel } from '../../common/types/blogs.model';
 import { PostsQueryRepository } from '../../posts/repositories/posts.query-repository';
-import { createBlogPostModel } from '../../base/types/posts.model';
+import { createBlogPostModel } from '../../common/types/posts.model';
 import { BasicAuthGuard } from '../../auth/guards/basic-auth.guard';
 import { SkipThrottle } from '@nestjs/throttler';
 import { CreateBlogUseCase } from '../use-cases/createBlog.use-case';

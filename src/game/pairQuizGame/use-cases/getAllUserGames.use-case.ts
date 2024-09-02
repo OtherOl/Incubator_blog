@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { AuthService } from '../../../auth/application/auth.service';
-import { sortDirectionHelper } from '../../../base/helpers/sortDirection.helper';
+import { sortDirectionHelper } from '../../../common/helpers/sortDirection.helper';
 import { PairQuizGameQueryRepository } from '../repositories/pairQuizGame.query-repository';
 
 @Injectable()

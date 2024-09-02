@@ -1,6 +1,6 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { UsersQueryRepository } from '../../users/repositories/users.query-repository';
-import { UserLogin } from '../../base/types/users.model';
+import { UserLogin } from '../../common/types/users.model';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()

@@ -75,13 +75,6 @@ export class PairQuizGameController {
   }
 
   @SkipThrottle()
-  @Get('users/top')
-  @HttpCode(200)
-  async getTopPlayers(@Query() query: { sort: string | string[]; pageNumber: number; pageSize: number }) {
-    return await this.getTopPlayersUseCase.getTopPlayers(query.sort, query.pageNumber, query.pageSize);
-  }
-
-  @SkipThrottle()
   @Post('pairs/connection')
   @UseGuards(AccessTokenGuard)
   @HttpCode(200)
@@ -95,5 +88,12 @@ export class PairQuizGameController {
   @HttpCode(200)
   async sendAnswer(@Req() req: Request, @Body('answer') answer: string) {
     return await this.sendAnswersUseCase.sendAnswers(answer, req.headers.authorization!);
+  }
+
+  @SkipThrottle()
+  @Get('users/top')
+  @HttpCode(200)
+  async getTopPlayers(@Query() query: { sort: string | string[]; pageNumber: number; pageSize: number }) {
+    return await this.getTopPlayersUseCase.getTopPlayers(query.sort, query.pageNumber, query.pageSize);
   }
 }

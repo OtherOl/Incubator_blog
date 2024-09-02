@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { createBlogPostModel } from '../../base/types/posts.model';
+import { createBlogPostModel } from '../../common/types/posts.model';
 import { BlogsQueryRepository } from '../repositories/blogs.query-repository';
 import { PostsQueryRepository } from '../../posts/repositories/posts.query-repository';
 import { PostsRepository } from '../../posts/repositories/posts.repository';

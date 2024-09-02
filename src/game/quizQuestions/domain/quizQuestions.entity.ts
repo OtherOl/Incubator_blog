@@ -1,5 +1,5 @@
 import { Column, Entity, PrimaryColumn } from 'typeorm';
-import { CreateQuestionModel } from '../../../base/types/game.model';
+import { CreateQuestionModel } from '../../../common/types/game.model';
 import { v4 as uuidv4 } from 'uuid';
 
 @Entity({ name: 'QuizQuestions' })

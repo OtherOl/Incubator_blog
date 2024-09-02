@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { CommentLikes, PostLikes } from '../../base/types/likes.model';
+import { CommentLikes, PostLikes } from '../../common/types/likes.model';
 import { InjectRepository } from '@nestjs/typeorm';
 import { InsertResult, Repository, UpdateResult } from 'typeorm';
 import { Likes } from '../domain/likes.entity';

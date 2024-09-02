@@ -3,7 +3,7 @@ import { LikesQueryRepository } from '../../likes/repositories/likes.query-repos
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Comment } from '../domain/comments.entity';
-import { CommentViewModel } from '../../base/types/comments.model';
+import { CommentViewModel } from '../../common/types/comments.model';
 
 @Injectable()
 export class CommentsQueryRepository {

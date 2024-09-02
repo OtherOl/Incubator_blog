@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { CreateQuestionModel } from '../../../base/types/game.model';
+import { CreateQuestionModel } from '../../../common/types/game.model';
 import { QuizQuestionsQueryRepository } from '../repositories/quizQuestions.query-repository';
 import { QuizQuestionsRepository } from '../repositories/quizQuestions.repository';
 

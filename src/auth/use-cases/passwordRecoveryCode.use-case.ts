@@ -1,7 +1,7 @@
 import { HttpCode, Injectable } from '@nestjs/common';
 import { UsersQueryRepository } from '../../users/repositories/users.query-repository';
 import { EmailManager } from '../../email/emailManager';
-import { resendConfirmation } from '../../base/types/users.model';
+import { resendConfirmation } from '../../common/types/users.model';
 
 @Injectable()
 export class PasswordRecoveryCodeUseCase {

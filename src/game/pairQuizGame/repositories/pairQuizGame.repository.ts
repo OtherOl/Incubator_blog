@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PairQuizGame } from '../domain/pairQuizGame.entity';
 import { Repository } from 'typeorm';
-import { AnswerViewModel, GameStatus, PlayerGameModel, PlayerType } from '../../../base/types/game.model';
+import { AnswerViewModel, GameStatus, PlayerGameModel, PlayerType } from '../../../common/types/game.model';
 import { Answer } from '../domain/answers.entity';
 import { PlayerEntity } from '../domain/player.entity';
 

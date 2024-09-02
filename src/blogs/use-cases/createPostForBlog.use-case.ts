@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { BlogsQueryRepository } from '../repositories/blogs.query-repository';
 import { PostsRepository } from '../../posts/repositories/posts.repository';
-import { createBlogPostModel } from '../../base/types/posts.model';
+import { createBlogPostModel } from '../../common/types/posts.model';
 import { Post } from '../../posts/domain/posts.entity';
 
 @Injectable()

@@ -1,5 +1,5 @@
 import { Column, Entity, Index, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { AnswerViewModel, Player, PlayerType } from '../../../base/types/game.model';
+import { AnswerViewModel, Player, PlayerType } from '../../../common/types/game.model';
 import { PairQuizGame } from './pairQuizGame.entity';
 
 @Entity()

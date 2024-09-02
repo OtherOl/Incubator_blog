@@ -1,6 +1,6 @@
 import { INestApplication } from '@nestjs/common';
 import { beforeGetAppAndCleanDb, blogModel } from './utils/test-utils';
-import { blogViewModel } from '../src/base/types/blogs.model';
+import { blogViewModel } from '../src/common/types/blogs.model';
 import { afterAll, beforeAll, describe, expect, it } from '@jest/globals';
 import request from 'supertest';
 

@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Get, HttpCode, Param, Post, Query, UseGuards } from '@nestjs/common';
 import { UsersQueryRepository } from '../repositories/users.query-repository';
-import { createUserModel } from '../../base/types/users.model';
+import { createUserModel } from '../../common/types/users.model';
 import { BasicAuthGuard } from '../../auth/guards/basic-auth.guard';
 import { SkipThrottle } from '@nestjs/throttler';
 import { CreateUserUseCase } from '../use-cases/createUser.use-case';

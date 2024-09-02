@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { UsersQueryRepository } from '../../users/repositories/users.query-repository';
 import { UsersRepository } from '../../users/repositories/users.repository';
-import { ConfirmationCode } from '../../base/types/users.model';
+import { ConfirmationCode } from '../../common/types/users.model';
 
 @Injectable()
 export class ConfirmEmailUseCase {

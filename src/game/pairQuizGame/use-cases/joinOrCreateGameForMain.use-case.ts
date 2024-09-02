@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { GameStatus, PlayerType, QuestionsViewModel } from '../../../base/types/game.model';
+import { GameStatus, PlayerType, QuestionsViewModel } from '../../../common/types/game.model';
 import { PairQuizGame } from '../domain/pairQuizGame.entity';
 import { PairQuizGameRepository } from '../repositories/pairQuizGame.repository';
 import { PairQuizGameQueryRepository } from '../repositories/pairQuizGame.query-repository';

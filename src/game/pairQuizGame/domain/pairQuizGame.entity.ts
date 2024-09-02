@@ -1,5 +1,5 @@
 import { Column, Entity, JoinColumn, OneToMany, PrimaryColumn } from 'typeorm';
-import { GameStatus, QuestionsViewModel } from '../../../base/types/game.model';
+import { GameStatus, QuestionsViewModel } from '../../../common/types/game.model';
 import { v4 as uuidv4 } from 'uuid';
 import { PlayerEntity } from './player.entity';
 

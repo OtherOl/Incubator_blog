@@ -1,5 +1,5 @@
-import { createCommentModel } from '../../base/types/comments.model';
-import { LikesEnum } from '../../base/types/likes.model';
+import { createCommentModel } from '../../common/types/comments.model';
+import { LikesEnum } from '../../common/types/likes.model';
 import { v4 as uuidv4 } from 'uuid';
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
 import { Post } from '../../posts/domain/posts.entity';

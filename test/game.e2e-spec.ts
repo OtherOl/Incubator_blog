@@ -1,9 +1,10 @@
 import { INestApplication } from '@nestjs/common';
 import { beforeGetAppAndCleanDb, questionCreateModel, userCreateModel } from './utils/test-utils';
-import { userModel } from '../src/base/types/users.model';
+import { userModel } from '../src/common/types/users.model';
 import request from 'supertest';
-import { GameViewModel, QuestionsViewModel } from '../src/base/types/game.model';
+import { GameViewModel, QuestionsViewModel } from '../src/common/types/game.model';
 import { QuizQuestions } from '../src/game/quizQuestions/domain/quizQuestions.entity';
+import { beforeAll, describe, expect, it } from '@jest/globals';
 
 jest.setTimeout(25000);
 describe('Testing Game', () => {
@@ -849,7 +850,7 @@ describe('Testing Game', () => {
         firstPlayerProgress: {
           score: 1,
           player: {
-            id: getGameByFirstPlayer.body.firstPlayerProgress.player.id,
+            id: user2.id,
             login: 'User2',
           },
           answers: [
@@ -863,7 +864,7 @@ describe('Testing Game', () => {
         secondPlayerProgress: {
           score: 1,
           player: {
-            id: getGameByFirstPlayer.body.secondPlayerProgress.player.id,
+            id: user1.id,
             login: 'OtherOl',
           },
           answers: [

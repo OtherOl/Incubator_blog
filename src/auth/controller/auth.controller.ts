@@ -5,7 +5,7 @@ import {
   createUserModel,
   resendConfirmation,
   UserLogin,
-} from '../../base/types/users.model';
+} from '../../common/types/users.model';
 import { AuthService } from '../application/auth.service';
 import { CreateUserForRegistrationUseCase } from '../../users/use-cases/createUserForRegistration.use-case';
 import { CreateNewPasswordUseCase } from '../../users/use-cases/createNewPassword.use-case';

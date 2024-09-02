@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { sortDirectionHelper } from '../../../base/helpers/sortDirection.helper';
+import { sortDirectionHelper } from '../../../common/helpers/sortDirection.helper';
 import { InjectRepository } from '@nestjs/typeorm';
 import { QuizQuestions } from '../domain/quizQuestions.entity';
 import { Repository } from 'typeorm';

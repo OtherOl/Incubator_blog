@@ -3,7 +3,7 @@ import { AuthService } from '../../../auth/application/auth.service';
 import { PairQuizGameQueryRepository } from '../repositories/pairQuizGame.query-repository';
 import { FirstPlayerSendAnswerUseCase } from './firstPlayerSendAnswer.use-case';
 import { SecondPlayerSendAnswerUseCase } from './secondPlayerSendAnswer.use-case';
-import { PlayerType } from '../../../base/types/game.model';
+import { PlayerType } from '../../../common/types/game.model';
 
 @Injectable()
 export class SendAnswersUseCase {

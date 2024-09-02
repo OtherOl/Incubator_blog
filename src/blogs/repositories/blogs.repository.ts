@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { blogViewModel, createBlogModel } from '../../base/types/blogs.model';
+import { blogViewModel, createBlogModel } from '../../common/types/blogs.model';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, Repository, UpdateResult } from 'typeorm';
 import { Blog } from '../domain/blogs.entity';

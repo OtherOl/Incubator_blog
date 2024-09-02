@@ -1,13 +1,13 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { postModel } from '../../base/types/posts.model';
-import { paginationModel } from '../../base/types/pagination.model';
-import { commentsModel } from '../../base/types/comments.model';
+import { postModel } from '../../common/types/posts.model';
+import { paginationModel } from '../../common/types/pagination.model';
+import { commentsModel } from '../../common/types/comments.model';
 import { LikesQueryRepository } from '../../likes/repositories/likes.query-repository';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Post } from '../domain/posts.entity';
 import { Comment } from '../../comments/domain/comments.entity';
-import { sortDirectionHelper } from '../../base/helpers/sortDirection.helper';
+import { sortDirectionHelper } from '../../common/helpers/sortDirection.helper';
 
 @Injectable()
 export class PostsQueryRepository {

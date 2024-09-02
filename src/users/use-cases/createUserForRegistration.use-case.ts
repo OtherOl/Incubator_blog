@@ -3,7 +3,7 @@ import { UsersQueryRepository } from '../repositories/users.query-repository';
 import { AuthService } from '../../auth/application/auth.service';
 import { EmailManager } from '../../email/emailManager';
 import { UsersRepository } from '../repositories/users.repository';
-import { createUserModel, userModel } from '../../base/types/users.model';
+import { createUserModel, userModel } from '../../common/types/users.model';
 import { User } from '../domain/users.entity';
 
 @Injectable()

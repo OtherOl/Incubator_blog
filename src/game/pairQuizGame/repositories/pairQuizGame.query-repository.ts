@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PairQuizGame } from '../domain/pairQuizGame.entity';
 import { Brackets, Repository, SelectQueryBuilder } from 'typeorm';
-import { GameStatus, PlayerType } from '../../../base/types/game.model';
+import { GameStatus, PlayerType } from '../../../common/types/game.model';
 import { PlayerEntity } from '../domain/player.entity';
 
 @Injectable()
@@ -114,11 +114,26 @@ export class PairQuizGameQueryRepository {
       .getOne();
 
     if (!game) return null;
+
+    const firstPlayer = await this.playerRepository
+      .createQueryBuilder('p')
+      .select(['p.answers', 'p.player', 'p.score'])
+      .where('p.gameId = :gameId', { gameId: game.id })
+      .andWhere('p.playerType = :type', { type: PlayerType.FirstPlayer })
+      .getOne();
+
+    const secondPlayer = await this.playerRepository
+      .createQueryBuilder('p')
+      .select(['p.answers', 'p.player', 'p.score'])
+      .where('p.gameId = :gameId', { gameId: game.id })
+      .andWhere('p.playerType = :type', { type: PlayerType.SecondPlayer })
+      .getOne();
+
     if (game.status === 'PendingSecondPlayer') {
       return {
         id: game.id,
-        firstPlayerProgress: game.firstPlayerProgress,
-        secondPlayerProgress: game.secondPlayerProgress,
+        firstPlayerProgress: firstPlayer,
+        secondPlayerProgress: secondPlayer,
         questions: null,
         status: game.status,
         pairCreatedDate: game.pairCreatedDate,
@@ -128,8 +143,8 @@ export class PairQuizGameQueryRepository {
     } else {
       return {
         id: game.id,
-        firstPlayerProgress: game.firstPlayerProgress,
-        secondPlayerProgress: game.secondPlayerProgress,
+        firstPlayerProgress: firstPlayer,
+        secondPlayerProgress: secondPlayer,
         questions: game.questions,
         status: game.status,
         pairCreatedDate: game.pairCreatedDate,
@@ -234,7 +249,45 @@ export class PairQuizGameQueryRepository {
     };
   }
 
-  async getTopPlayers(queryBuilder: SelectQueryBuilder<PairQuizGame>) {
-    return await queryBuilder.getMany();
+  async getTopPlayers(pageNumber: number = 1, pageSize: number = 10, sort: string | string[]) {
+    const queryTopUsers: SelectQueryBuilder<PlayerEntity> = await this.playerRepository
+      .createQueryBuilder('p')
+      .select([
+        'COALESCE(Sum(p.score), 0)::INTEGER as "sumScore"',
+        'COALESCE(AVG(p.score), 0)::FLOAT as "avgScores"',
+        'COALESCE(Sum(p.gamesCount), 0)::INTEGER as "gamesCount"',
+        'COALESCE(Sum(p.winsCount), 0)::INTEGER as "winsCount"',
+        'COALESCE(Sum(p.lossesCount), 0)::INTEGER as "lossesCount"',
+        'COALESCE(Sum(p.drawsCount), 0)::INTEGER as "drawsCount"',
+        'p.player as player',
+      ])
+      .groupBy('p.player');
+
+    let topUsers: PlayerEntity[];
+    if (Array.isArray(sort)) {
+      sort.forEach((criteria) => {
+        const [field, sortDirection] = criteria.split(' ');
+        queryTopUsers.orderBy(`"${field}"`, sortDirection.toUpperCase() as 'ASC' | 'DESC');
+      });
+      topUsers = await queryTopUsers
+        .limit(pageSize)
+        .offset((pageNumber - 1) * pageSize)
+        .getRawMany();
+    } else {
+      const [field, sortDirection] = sort.split(' ');
+      topUsers = await queryTopUsers
+        .orderBy(`"${field}"`, sortDirection.toUpperCase() as 'ASC' | 'DESC')
+        .limit(pageSize)
+        .offset((pageNumber - 1) * pageSize)
+        .getRawMany();
+    }
+
+    return {
+      pagesCount: Math.ceil(topUsers.length / pageSize),
+      page: (pageNumber - 1) * pageSize,
+      pageSize: pageSize,
+      totalCount: topUsers.length,
+      items: topUsers,
+    };
   }
 }
