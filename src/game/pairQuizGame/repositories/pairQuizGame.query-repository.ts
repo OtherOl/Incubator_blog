@@ -273,7 +273,7 @@ export class PairQuizGameQueryRepository {
     if (Array.isArray(sort)) {
       sort.forEach((criteria) => {
         const [field, sortDirection] = criteria.split(' ');
-        queryTopUsers.orderBy(`"${field}"`, sortDirection.toUpperCase() as 'ASC' | 'DESC');
+        queryTopUsers.addOrderBy(`"${field}"`, sortDirection.toUpperCase() as 'ASC' | 'DESC');
       });
       topUsers = await queryTopUsers
         .limit(pageSize)
