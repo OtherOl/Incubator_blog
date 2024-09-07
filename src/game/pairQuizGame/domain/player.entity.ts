@@ -39,6 +39,9 @@ export class PlayerEntity {
   @Column({ default: 0 })
   gamesCount: number;
 
+  @Column({ nullable: true, default: null })
+  timeToAnswer: string;
+
   static createPlayer(userId: string, login: string, gameId: string, playerType: PlayerType) {
     const player = new PlayerEntity();
 

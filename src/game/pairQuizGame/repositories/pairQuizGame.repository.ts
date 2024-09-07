@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import { AnswerViewModel, GameStatus, PlayerGameModel, PlayerType } from '../../../common/types/game.model';
 import { Answer } from '../domain/answers.entity';
 import { PlayerEntity } from '../domain/player.entity';
+import { add } from 'date-fns/add';
 
 @Injectable()
 export class PairQuizGameRepository {
@@ -172,5 +173,12 @@ export class PairQuizGameRepository {
       .where('gameId = :gameId', { gameId })
       .andWhere('playerType = :type', { type: PlayerType.SecondPlayer })
       .execute();
+  }
+
+  async setTimeToAnswer(playerId: string) {
+    return await this.playerRepository.update(
+      { id: playerId },
+      { timeToAnswer: add(new Date(), { seconds: 10 }).toISOString() },
+    );
   }
 }

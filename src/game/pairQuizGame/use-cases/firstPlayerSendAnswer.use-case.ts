@@ -21,6 +21,7 @@ export class FirstPlayerSendAnswerUseCase {
     gameId: string,
     gameQuestions: QuestionsViewModel[],
     inputAnswer: string,
+    secondPlayerId: string,
   ) {
     if (player.answers.length === gameQuestions.length) {
       throw new ForbiddenException('You already answered all questions');
@@ -43,6 +44,9 @@ export class FirstPlayerSendAnswerUseCase {
         );
         await this.changeAnswerStatusFirstPlayerUseCase.changeStatus(gameId, gameQuestions);
         await this.changeStatusToFinishedUseCase.changeToFinished(gameId, gameQuestions);
+        if (player.answers.length === gameQuestions.length - 1) {
+          await this.pairQuizGameRepository.setTimeToAnswer(secondPlayerId);
+        }
         return {
           addedAt: answer.addedAt,
           answerStatus: answer.answerStatus,
@@ -63,6 +67,9 @@ export class FirstPlayerSendAnswerUseCase {
         );
         await this.changeAnswerStatusFirstPlayerUseCase.changeStatus(gameId, gameQuestions);
         await this.changeStatusToFinishedUseCase.changeToFinished(gameId, gameQuestions);
+        if (player.answers.length === gameQuestions.length - 1) {
+          await this.pairQuizGameRepository.setTimeToAnswer(secondPlayerId);
+        }
         return {
           addedAt: answer.addedAt,
           answerStatus: answer.answerStatus,
