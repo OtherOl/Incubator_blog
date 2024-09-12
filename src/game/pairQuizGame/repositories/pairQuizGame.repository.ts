@@ -176,9 +176,12 @@ export class PairQuizGameRepository {
   }
 
   async setTimeToAnswer(playerId: string) {
-    return await this.playerRepository.update(
-      { id: playerId },
-      { timeToAnswer: add(new Date(), { seconds: 10 }).toISOString() },
-    );
+    const time = add(new Date(), { seconds: 10 }).toISOString();
+    return await this.playerRepository
+      .createQueryBuilder()
+      .update()
+      .set({ timeToAnswer: time })
+      .where('player ::jsonb @> :player', { player: { id: playerId } })
+      .execute();
   }
 }

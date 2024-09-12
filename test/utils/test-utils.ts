@@ -17,6 +17,17 @@ export async function beforeGetAppAndCleanDb() {
   return app;
 }
 
+export async function beforeGetApp() {
+  let app: INestApplication;
+  const module: TestingModule = await Test.createTestingModule({ imports: [AppModule] }).compile();
+  // eslint-disable-next-line prefer-const
+  app = module.createNestApplication();
+  appSettings(app);
+  await app.init();
+
+  return app;
+}
+
 export const blogModel = (name: string, desc: string, web: string) => {
   return {
     name: name,
