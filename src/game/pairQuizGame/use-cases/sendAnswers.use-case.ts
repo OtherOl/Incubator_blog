@@ -15,7 +15,7 @@ export class SendAnswersUseCase {
     private readonly pairQuizGameRepo: PairQuizGameRepository,
     private readonly firstPlayerSendAnswerUseCase: FirstPlayerSendAnswerUseCase,
     private readonly secondPlayerSendAnswerUseCase: SecondPlayerSendAnswerUseCase,
-    private changeStatusToFinishedUseCase: ChangeStatusToFinishedUseCase,
+    private readonly changeStatusToFinishedUseCase: ChangeStatusToFinishedUseCase,
   ) {}
 
   async sendAnswers(inputAnswer: string, accessToken: string) {

@@ -24,14 +24,21 @@ import { GetTopPlayersUseCase } from '../use-cases/getTopPlayers.use-case';
 @Controller('pair-game-quiz')
 export class PairQuizGameController {
   constructor(
-    private getUnfinishedGameUseCase: GetUnfinishedGameUseCase,
-    private createOrConnectGameUseCase: CreateOrConnectGameUseCase,
-    private getGameByIdUseCase: GetGameByIdUseCase,
-    private sendAnswersUseCase: SendAnswersUseCase,
-    private getAllUserGamesUseCase: GetAllUserGamesUseCase,
-    private getStatisticUseCase: GetStatisticUseCase,
-    private getTopPlayersUseCase: GetTopPlayersUseCase,
+    private readonly getUnfinishedGameUseCase: GetUnfinishedGameUseCase,
+    private readonly createOrConnectGameUseCase: CreateOrConnectGameUseCase,
+    private readonly getGameByIdUseCase: GetGameByIdUseCase,
+    private readonly sendAnswersUseCase: SendAnswersUseCase,
+    private readonly getAllUserGamesUseCase: GetAllUserGamesUseCase,
+    private readonly getStatisticUseCase: GetStatisticUseCase,
+    private readonly getTopPlayersUseCase: GetTopPlayersUseCase,
   ) {}
+
+  @Get('test')
+  async getValues() {
+    return fetch('https://api.nbrb.by/exrates/rates/456?periodicity=0').then((res) => {
+      return res.json();
+    });
+  }
 
   @SkipThrottle()
   @Get('pairs/my')

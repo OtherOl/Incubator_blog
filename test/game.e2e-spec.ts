@@ -9,7 +9,7 @@ import { userModel } from '../src/common/types/users.model';
 import request from 'supertest';
 import { GameViewModel, QuestionsViewModel } from '../src/common/types/game.model';
 import { QuizQuestions } from '../src/game/quizQuestions/domain/quizQuestions.entity';
-import { beforeAll, describe, expect, it } from '@jest/globals';
+import { beforeAll, describe, expect, it, jest } from '@jest/globals';
 
 jest.setTimeout(25000);
 describe('Testing Game', () => {
@@ -1076,7 +1076,10 @@ describe('Testing 10 seconds to answer after someone answer all questions', () =
   let app: INestApplication;
   let accessToken1: string;
   let accessToken2: string;
+  let accessToken3: string;
+  let accessToken4: string;
   let gameZero: GameViewModel;
+  const correctAnswers = ['Yes', '100', '550 BYN', 'Metal', 'Of course'];
 
   beforeAll(async () => {
     app = await beforeGetApp();
@@ -1148,7 +1151,7 @@ describe('Testing 10 seconds to answer after someone answer all questions', () =
     gameZero = secondPlayerConnect.body;
   });
 
-  it('OtherOl should answer 5 questions faster than second', async () => {
+  it('OtherOl should answer 5 questions faster than second player', async () => {
     for (let i = 0; i < 5; i++) {
       const sendAnswer1 = await request(app.getHttpServer())
         .post('/pair-game-quiz/pairs/my-current/answers')
@@ -1163,46 +1166,595 @@ describe('Testing 10 seconds to answer after someone answer all questions', () =
     }
   });
 
-  it("Shouldn't send answers by User2 because no time to answer", async () => {
-    setTimeout(async () => {
-      const sendAnswerUser2 = await request(app.getHttpServer())
-        .post('/pair-game-quiz/pairs/my-current/answers')
-        .send({ answer: 'YES' })
-        .set('Authorization', 'bearer ' + accessToken2);
-      expect(sendAnswerUser2.status).toBe(403);
-    }, 12000);
+  it('Should return statistic for OtherOl and User2', async () => {
+    await new Promise((resolve) => setTimeout(resolve, 12000));
+
+    const game = await request(app.getHttpServer())
+      .get(`/pair-game-quiz/pairs/${gameZero.id}`)
+      .set('Authorization', 'bearer ' + accessToken1);
+    expect(game.status).toBe(200);
+    expect(game.body).toEqual({
+      id: gameZero.id,
+      firstPlayerProgress: {
+        score: 2,
+        player: {
+          id: gameZero.firstPlayerProgress!.player.id,
+          login: 'OtherOl',
+        },
+        answers: expect.any(Array),
+      },
+      secondPlayerProgress: {
+        score: 0,
+        player: {
+          id: gameZero.secondPlayerProgress!.player.id,
+          login: 'User2',
+        },
+        answers: expect.any(Array),
+      },
+      questions: expect.any(Array),
+      status: 'Finished',
+      pairCreatedDate: expect.any(String),
+      startGameDate: expect.any(String),
+      finishGameDate: expect.any(String),
+    });
   });
 
-  it('Should return statistic for OtherOl and User2', async () => {
-    setTimeout(async () => {
-      const game = await request(app.getHttpServer())
-        .get(`/pair-game-quiz/pairs/${gameZero.id}`)
-        .set('Authorization', 'bearer ' + accessToken1);
-      expect(game.status).toBe(200);
-      expect(game.body).toEqual({
-        id: gameZero.id,
-        firstPlayerProgress: {
-          score: 2,
-          player: {
-            id: gameZero.firstPlayerProgress!.player.id,
-            login: 'OtherOl',
-          },
-          answers: expect.any(Array),
+  it('Should create game by OtherOl, connect by User2', async () => {
+    const firstPlayerConnect = await request(app.getHttpServer())
+      .post('/pair-game-quiz/pairs/connection')
+      .set('Authorization', 'bearer ' + accessToken1);
+    expect(firstPlayerConnect.status).toBe(200);
+    expect(firstPlayerConnect.body).toEqual({
+      id: firstPlayerConnect.body.id,
+      firstPlayerProgress: {
+        score: 0,
+        player: {
+          id: firstPlayerConnect.body.firstPlayerProgress.player.id,
+          login: 'OtherOl',
         },
-        secondPlayerProgress: {
-          score: 0,
-          player: {
-            id: gameZero.secondPlayerProgress!.player.id,
-            login: 'User2',
-          },
-          answers: expect.any(Array),
+        answers: [],
+      },
+      secondPlayerProgress: null,
+      questions: null,
+      status: 'PendingSecondPlayer',
+      pairCreatedDate: expect.any(String),
+      startGameDate: null,
+      finishGameDate: null,
+    });
+
+    const secondPlayerConnect = await request(app.getHttpServer())
+      .post('/pair-game-quiz/pairs/connection')
+      .set('Authorization', 'bearer ' + accessToken2);
+    expect(secondPlayerConnect.status).toBe(200);
+    expect(secondPlayerConnect.body).toEqual({
+      id: secondPlayerConnect.body.id,
+      firstPlayerProgress: {
+        score: 0,
+        player: {
+          id: secondPlayerConnect.body.firstPlayerProgress.player.id,
+          login: 'OtherOl',
         },
-        questions: expect.any(Array),
-        status: 'Finished',
-        pairCreatedDate: expect.any(String),
-        startGameDate: expect.any(String),
-        finishGameDate: expect.any(String),
+        answers: [],
+      },
+      secondPlayerProgress: {
+        score: 0,
+        player: {
+          id: secondPlayerConnect.body.secondPlayerProgress.player.id,
+          login: 'User2',
+        },
+        answers: [],
+      },
+      questions: expect.any(Array),
+      status: 'Active',
+      pairCreatedDate: expect.any(String),
+      startGameDate: expect.any(String),
+      finishGameDate: null,
+    });
+    gameZero = secondPlayerConnect.body;
+  });
+
+  it('Should add 3 correct answers by User2', async () => {
+    for (let i = 0; i < 3; i++) {
+      const answer = await request(app.getHttpServer())
+        .post('/pair-game-quiz/pairs/my-current/answers')
+        .send({ answer: correctAnswers[i] })
+        .set('Authorization', 'bearer ' + accessToken2);
+      expect(answer.status).toBe(200);
+      expect(answer.body).toEqual({
+        questionId: expect.any(String),
+        answerStatus: 'Correct',
+        addedAt: expect.any(String),
       });
-    }, 5000);
+    }
+  });
+
+  it('Should add 5 correct answers by OtherOl', async () => {
+    for (let i = 0; i < 5; i++) {
+      const answer = await request(app.getHttpServer())
+        .post('/pair-game-quiz/pairs/my-current/answers')
+        .send({ answer: correctAnswers[i] })
+        .set('Authorization', 'bearer ' + accessToken1);
+      expect(answer.status).toBe(200);
+      expect(answer.body).toEqual({
+        questionId: expect.any(String),
+        answerStatus: 'Correct',
+        addedAt: expect.any(String),
+      });
+    }
+  });
+
+  it('After 10 second should return 404 status by User2 - my current', async () => {
+    await new Promise((resolve) => setTimeout(resolve, 11000));
+    const game = await request(app.getHttpServer())
+      .get('/pair-game-quiz/pairs/my-current')
+      .set('Authorization', 'bearer ' + accessToken2);
+    expect(game.status).toBe(404);
+  });
+
+  it('Should return finished game by OtherOl', async () => {
+    const game = await request(app.getHttpServer())
+      .get(`/pair-game-quiz/pairs/${gameZero.id}`)
+      .set('Authorization', 'bearer ' + accessToken1);
+    expect(game.status).toBe(200);
+    expect(game.body).toEqual({
+      id: gameZero.id,
+      firstPlayerProgress: {
+        score: 6,
+        player: {
+          id: gameZero.firstPlayerProgress!.player.id,
+          login: 'OtherOl',
+        },
+        answers: expect.any(Array),
+      },
+      secondPlayerProgress: {
+        score: 3,
+        player: {
+          id: gameZero.secondPlayerProgress!.player.id,
+          login: 'User2',
+        },
+        answers: expect.any(Array),
+      },
+      questions: expect.any(Array),
+      status: 'Finished',
+      pairCreatedDate: expect.any(String),
+      startGameDate: expect.any(String),
+      finishGameDate: expect.any(String),
+    });
+  });
+
+  it('Should create game by OtherOl, connect to game by User2', async () => {
+    const firstPlayerConnect = await request(app.getHttpServer())
+      .post('/pair-game-quiz/pairs/connection')
+      .set('Authorization', 'bearer ' + accessToken1);
+    expect(firstPlayerConnect.status).toBe(200);
+    expect(firstPlayerConnect.body).toEqual({
+      id: firstPlayerConnect.body.id,
+      firstPlayerProgress: {
+        score: 0,
+        player: {
+          id: firstPlayerConnect.body.firstPlayerProgress.player.id,
+          login: 'OtherOl',
+        },
+        answers: [],
+      },
+      secondPlayerProgress: null,
+      questions: null,
+      status: 'PendingSecondPlayer',
+      pairCreatedDate: expect.any(String),
+      startGameDate: null,
+      finishGameDate: null,
+    });
+
+    const secondPlayerConnect = await request(app.getHttpServer())
+      .post('/pair-game-quiz/pairs/connection')
+      .set('Authorization', 'bearer ' + accessToken2);
+    expect(secondPlayerConnect.status).toBe(200);
+    expect(secondPlayerConnect.body).toEqual({
+      id: secondPlayerConnect.body.id,
+      firstPlayerProgress: {
+        score: 0,
+        player: {
+          id: secondPlayerConnect.body.firstPlayerProgress.player.id,
+          login: 'OtherOl',
+        },
+        answers: [],
+      },
+      secondPlayerProgress: {
+        score: 0,
+        player: {
+          id: secondPlayerConnect.body.secondPlayerProgress.player.id,
+          login: 'User2',
+        },
+        answers: [],
+      },
+      questions: expect.any(Array),
+      status: 'Active',
+      pairCreatedDate: expect.any(String),
+      startGameDate: expect.any(String),
+      finishGameDate: null,
+    });
+    gameZero = secondPlayerConnect.body;
+  });
+
+  it('Should add 3 incorrect answers by User2', async () => {
+    for (let i = 0; i < 3; i++) {
+      const answer = await request(app.getHttpServer())
+        .post('/pair-game-quiz/pairs/my-current/answers')
+        .send({ answer: 'Incorrect' })
+        .set('Authorization', 'bearer ' + accessToken2);
+      expect(answer.status).toBe(200);
+      expect(answer.body).toEqual({
+        questionId: expect.any(String),
+        answerStatus: 'Incorrect',
+        addedAt: expect.any(String),
+      });
+    }
+  });
+
+  it('Should add 3 correct answers by OtherOl', async () => {
+    for (let i = 0; i < 3; i++) {
+      const answer = await request(app.getHttpServer())
+        .post('/pair-game-quiz/pairs/my-current/answers')
+        .send({ answer: correctAnswers[i] })
+        .set('Authorization', 'bearer ' + accessToken1);
+      expect(answer.status).toBe(200);
+      expect(answer.body).toEqual({
+        questionId: expect.any(String),
+        answerStatus: 'Correct',
+        addedAt: expect.any(String),
+      });
+    }
+  });
+
+  it('Should add 2 correct answers by User2', async () => {
+    for (let i = 3; i < 5; i++) {
+      const answer = await request(app.getHttpServer())
+        .post('/pair-game-quiz/pairs/my-current/answers')
+        .send({ answer: correctAnswers[i] })
+        .set('Authorization', 'bearer ' + accessToken2);
+      expect(answer.status).toBe(200);
+      expect(answer.body).toEqual({
+        questionId: expect.any(String),
+        answerStatus: 'Correct',
+        addedAt: expect.any(String),
+      });
+    }
+  });
+
+  it('Should return active game by User2 -> /myCurrent; await 11 seconds -> get 404 status', async () => {
+    const game = await request(app.getHttpServer())
+      .get('/pair-game-quiz/pairs/my-current')
+      .set('Authorization', 'bearer ' + accessToken2);
+    expect(game.status).toBe(200);
+    expect(game.body).toEqual({
+      id: gameZero.id,
+      firstPlayerProgress: {
+        score: expect.any(Number),
+        player: {
+          id: expect.any(String),
+          login: 'OtherOl',
+        },
+        answers: expect.any(Array),
+      },
+      secondPlayerProgress: {
+        score: expect.any(Number),
+        player: {
+          id: expect.any(String),
+          login: 'User2',
+        },
+        answers: expect.any(Array),
+      },
+      questions: expect.any(Array),
+      status: 'Active',
+      pairCreatedDate: expect.any(String),
+      startGameDate: expect.any(String),
+      finishGameDate: null,
+    });
+
+    await new Promise((resolve) => setTimeout(resolve, 11000));
+    const errGame = await request(app.getHttpServer())
+      .get('/pair-quiz-game/pairs/my-current')
+      .set('Authorization', 'bearer ' + accessToken2);
+    expect(errGame.status).toBe(404);
+  });
+
+  it('Should return finished game by User2', async () => {
+    const game = await request(app.getHttpServer())
+      .get(`/pair-game-quiz/pairs/${gameZero.id}`)
+      .set('Authorization', 'bearer ' + accessToken2);
+    expect(game.status).toBe(200);
+    expect(game.body).toEqual({
+      id: gameZero.id,
+      firstPlayerProgress: {
+        score: 3,
+        player: {
+          id: gameZero.firstPlayerProgress!.player.id,
+          login: 'OtherOl',
+        },
+        answers: expect.any(Array),
+      },
+      secondPlayerProgress: {
+        score: 3,
+        player: {
+          id: gameZero.secondPlayerProgress!.player.id,
+          login: 'User2',
+        },
+        answers: expect.any(Array),
+      },
+      questions: expect.any(Array),
+      status: 'Finished',
+      pairCreatedDate: expect.any(String),
+      startGameDate: expect.any(String),
+      finishGameDate: expect.any(String),
+    });
+  });
+
+  it('Should create game by OtherOl, connect to game by User2', async () => {
+    const firstPlayerConnect = await request(app.getHttpServer())
+      .post('/pair-game-quiz/pairs/connection')
+      .set('Authorization', 'bearer ' + accessToken1);
+    expect(firstPlayerConnect.status).toBe(200);
+    expect(firstPlayerConnect.body).toEqual({
+      id: firstPlayerConnect.body.id,
+      firstPlayerProgress: {
+        score: 0,
+        player: {
+          id: firstPlayerConnect.body.firstPlayerProgress.player.id,
+          login: 'OtherOl',
+        },
+        answers: [],
+      },
+      secondPlayerProgress: null,
+      questions: null,
+      status: 'PendingSecondPlayer',
+      pairCreatedDate: expect.any(String),
+      startGameDate: null,
+      finishGameDate: null,
+    });
+
+    const secondPlayerConnect = await request(app.getHttpServer())
+      .post('/pair-game-quiz/pairs/connection')
+      .set('Authorization', 'bearer ' + accessToken2);
+    expect(secondPlayerConnect.status).toBe(200);
+    expect(secondPlayerConnect.body).toEqual({
+      id: secondPlayerConnect.body.id,
+      firstPlayerProgress: {
+        score: 0,
+        player: {
+          id: secondPlayerConnect.body.firstPlayerProgress.player.id,
+          login: 'OtherOl',
+        },
+        answers: [],
+      },
+      secondPlayerProgress: {
+        score: 0,
+        player: {
+          id: secondPlayerConnect.body.secondPlayerProgress.player.id,
+          login: 'User2',
+        },
+        answers: [],
+      },
+      questions: expect.any(Array),
+      status: 'Active',
+      pairCreatedDate: expect.any(String),
+      startGameDate: expect.any(String),
+      finishGameDate: null,
+    });
+    gameZero = secondPlayerConnect.body;
+  });
+
+  it('Should add 3 incorrect answers by User2', async () => {
+    for (let i = 0; i < 3; i++) {
+      const answer = await request(app.getHttpServer())
+        .post('/pair-game-quiz/pairs/my-current/answers')
+        .send({ answer: 'Incorrect' })
+        .set('Authorization', 'bearer ' + accessToken2);
+      expect(answer.status).toBe(200);
+      expect(answer.body).toEqual({
+        questionId: expect.any(String),
+        answerStatus: 'Incorrect',
+        addedAt: expect.any(String),
+      });
+    }
+  });
+
+  it('Should add 4 correct answers by OtherOl', async () => {
+    for (let i = 0; i < 4; i++) {
+      const answer = await request(app.getHttpServer())
+        .post('/pair-game-quiz/pairs/my-current/answers')
+        .send({ answer: correctAnswers[i] })
+        .set('Authorization', 'bearer ' + accessToken1);
+      expect(answer.status).toBe(200);
+      expect(answer.body).toEqual({
+        questionId: expect.any(String),
+        answerStatus: 'Correct',
+        addedAt: expect.any(String),
+      });
+    }
+  });
+
+  let gameOne: GameViewModel;
+  it('Should create game2 by User3 and connect to game by User4', async () => {
+    const login = await request(app.getHttpServer())
+      .post('/auth/login')
+      .send({ loginOrEmail: 'User3', password: '12345678' });
+    expect(login.status).toBe(200);
+    accessToken3 = login.body.accessToken;
+
+    const newUser4 = await request(app.getHttpServer())
+      .post('/sa/users')
+      .send(userCreateModel('User4', '12345678', 'pilya0123@gmail.com'))
+      .auth('admin', 'qwerty');
+    expect(newUser4.status).toBe(201);
+
+    const login4 = await request(app.getHttpServer())
+      .post('/auth/login')
+      .send({ loginOrEmail: 'User4', password: '12345678' });
+    expect(login4.status).toBe(200);
+    accessToken4 = login4.body.accessToken;
+
+    const thirdPlayerConnect = await request(app.getHttpServer())
+      .post('/pair-game-quiz/pairs/connection')
+      .set('Authorization', 'bearer ' + accessToken3);
+    expect(thirdPlayerConnect.status).toBe(200);
+    expect(thirdPlayerConnect.body).toEqual({
+      id: thirdPlayerConnect.body.id,
+      firstPlayerProgress: {
+        score: 0,
+        player: {
+          id: thirdPlayerConnect.body.firstPlayerProgress.player.id,
+          login: 'User3',
+        },
+        answers: [],
+      },
+      secondPlayerProgress: null,
+      questions: null,
+      status: 'PendingSecondPlayer',
+      pairCreatedDate: expect.any(String),
+      startGameDate: null,
+      finishGameDate: null,
+    });
+
+    const fourthPlayerConnect = await request(app.getHttpServer())
+      .post('/pair-game-quiz/pairs/connection')
+      .set('Authorization', 'bearer ' + accessToken4);
+    expect(fourthPlayerConnect.status).toBe(200);
+    expect(fourthPlayerConnect.body).toEqual({
+      id: fourthPlayerConnect.body.id,
+      firstPlayerProgress: {
+        score: 0,
+        player: {
+          id: expect.any(String),
+          login: 'User3',
+        },
+        answers: [],
+      },
+      secondPlayerProgress: {
+        score: 0,
+        player: {
+          id: expect.any(String),
+          login: 'User4',
+        },
+        answers: [],
+      },
+      questions: expect.any(Array),
+      status: 'Active',
+      pairCreatedDate: expect.any(String),
+      startGameDate: expect.any(String),
+      finishGameDate: null,
+    });
+
+    gameOne = fourthPlayerConnect.body;
+  });
+
+  it('Should add 5 correct answers by User3', async () => {
+    for (let i = 0; i < 5; i++) {
+      const answer = await request(app.getHttpServer())
+        .post('/pair-game-quiz/pairs/my-current/answers')
+        .send({ answer: correctAnswers[i] })
+        .set('Authorization', 'bearer ' + accessToken3);
+      expect(answer.status).toBe(200);
+      expect(answer.body).toEqual({
+        questionId: expect.any(String),
+        answerStatus: 'Correct',
+        addedAt: expect.any(String),
+      });
+    }
+  });
+
+  it('Should add 2 correct answers by User4', async () => {
+    for (let i = 0; i < 2; i++) {
+      const answer = await request(app.getHttpServer())
+        .post('/pair-game-quiz/pairs/my-current/answers')
+        .send({ answer: correctAnswers[i] })
+        .set('Authorization', 'bearer ' + accessToken4);
+      expect(answer.status).toBe(200);
+      expect(answer.body).toEqual({
+        questionId: expect.any(String),
+        answerStatus: 'Correct',
+        addedAt: expect.any(String),
+      });
+    }
+  });
+
+  it('Should add 2 correct answers by User2', async () => {
+    for (let i = 3; i < 5; i++) {
+      const answer = await request(app.getHttpServer())
+        .post('/pair-game-quiz/pairs/my-current/answers')
+        .send({ answer: correctAnswers[i] })
+        .set('Authorization', 'bearer ' + accessToken2);
+      expect(answer.status).toBe(200);
+      expect(answer.body).toEqual({
+        questionId: expect.any(String),
+        answerStatus: 'Correct',
+        addedAt: expect.any(String),
+      });
+    }
+  });
+
+  it('Should return finished game by User2 after await 11 seconds', async () => {
+    await new Promise((resolve) => setTimeout(resolve, 11000));
+
+    const game = await request(app.getHttpServer())
+      .get(`/pair-game-quiz/pairs/${gameZero.id}`)
+      .set('Authorization', 'bearer ' + accessToken2);
+    expect(game.status).toBe(200);
+    expect(game.body).toEqual({
+      id: gameZero.id,
+      firstPlayerProgress: {
+        score: 4,
+        player: {
+          id: gameZero.firstPlayerProgress!.player.id,
+          login: 'OtherOl',
+        },
+        answers: expect.any(Array),
+      },
+      secondPlayerProgress: {
+        score: 3,
+        player: {
+          id: gameZero.secondPlayerProgress!.player.id,
+          login: 'User2',
+        },
+        answers: expect.any(Array),
+      },
+      questions: expect.any(Array),
+      status: 'Finished',
+      pairCreatedDate: expect.any(String),
+      startGameDate: expect.any(String),
+      finishGameDate: expect.any(String),
+    });
+  });
+
+  it('Should return finished game by User3 after await 11 seconds', async () => {
+    await new Promise((resolve) => setTimeout(resolve, 11000));
+
+    const game = await request(app.getHttpServer())
+      .get(`/pair-game-quiz/pairs/${gameOne.id}`)
+      .set('Authorization', 'bearer ' + accessToken3);
+    expect(game.status).toBe(200);
+    expect(game.body).toEqual({
+      id: gameOne.id,
+      firstPlayerProgress: {
+        score: 6,
+        player: {
+          id: gameOne.firstPlayerProgress!.player.id,
+          login: 'User3',
+        },
+        answers: expect.any(Array),
+      },
+      secondPlayerProgress: {
+        score: 2,
+        player: {
+          id: gameOne.secondPlayerProgress!.player.id,
+          login: 'User4',
+        },
+        answers: expect.any(Array),
+      },
+      questions: expect.any(Array),
+      status: 'Finished',
+      pairCreatedDate: expect.any(String),
+      startGameDate: expect.any(String),
+      finishGameDate: expect.any(String),
+    });
   });
 });
