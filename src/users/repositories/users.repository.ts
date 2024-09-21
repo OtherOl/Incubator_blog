@@ -69,14 +69,17 @@ export class UsersRepository {
     await this.usersRepository
       .createQueryBuilder()
       .update(User)
-      .set({ banInfo: () => `jsonb_set("banInfo", '{banDate}', '"${new Date().toISOString()}"')` })
+      .set({
+        banInfo: () =>
+          `jsonb_set("banInfo", '{banDate}', '${isBanned ? `"${new Date().toISOString()}"` : null}')`,
+      })
       .where('id = :userId', { userId })
       .execute();
 
     return await this.usersRepository
       .createQueryBuilder()
       .update(User)
-      .set({ banInfo: () => `jsonb_set("banInfo", '{banReason}', '"${banReason}"')` })
+      .set({ banInfo: () => `jsonb_set("banInfo", '{banReason}', '${isBanned ? `"${banReason}"` : null}')` })
       .where('id = :userId', { userId })
       .execute();
   }

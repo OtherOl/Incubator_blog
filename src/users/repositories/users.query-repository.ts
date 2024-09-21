@@ -24,7 +24,7 @@ export class UsersQueryRepository {
     const queryCountUsers: SelectQueryBuilder<User> = await this.usersRepository
       .createQueryBuilder('u')
       .where('u.login ilike :login', { login: `%${searchLoginTerm}%` })
-      .andWhere('u.email ilike :email', { email: `%${searchEmailTerm}%` });
+      .orWhere('u.email ilike :email', { email: `%${searchEmailTerm}%` });
 
     if (banStatus === 'all') {
       countUsers = await queryCountUsers.getCount();
@@ -43,7 +43,7 @@ export class UsersQueryRepository {
       .createQueryBuilder('u')
       .select(['u.id', 'u.login', 'u.email', 'u.createdAt', 'u.banInfo'])
       .where('u.login ilike :login', { login: `%${searchLoginTerm}%` })
-      .andWhere('u.email ilike :email', { email: `%${searchEmailTerm}%` });
+      .orWhere('u.email ilike :email', { email: `%${searchEmailTerm}%` });
 
     if (banStatus === 'all') {
       foundUsers = await queryFoundUsers
