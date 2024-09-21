@@ -13,7 +13,6 @@ export class CreateUserUseCase {
 
   async createUser(inputData: createUserModel) {
     const passwordHash = await this.authService.createPasswordHash(inputData.password);
-
     const newUser: userModel = User.createNewUser(inputData.login, inputData.email, passwordHash, true);
     return await this.usersRepository.createUser(newUser);
   }

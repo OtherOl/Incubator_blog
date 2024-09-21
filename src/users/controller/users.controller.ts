@@ -29,9 +29,9 @@ export class UsersController {
   ) {}
 
   @SkipThrottle()
-  @UseGuards(BasicAuthGuard)
   @Get()
   @HttpCode(200)
+  @UseGuards(BasicAuthGuard)
   async getAllUsers(
     @Query()
     query: {
@@ -56,9 +56,9 @@ export class UsersController {
   }
 
   @SkipThrottle()
-  @UseGuards(BasicAuthGuard)
   @Post()
   @HttpCode(201)
+  @UseGuards(BasicAuthGuard)
   async createUser(@Body() inputData: createUserModel) {
     return await this.createUserUseCase.createUser(inputData);
   }

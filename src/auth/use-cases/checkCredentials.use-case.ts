@@ -11,6 +11,7 @@ export class CheckCredentialsUseCase {
     const foundedUser = await this.usersQueryRepository.findByLoginOrEmail(inputData.loginOrEmail);
     if (!foundedUser) throw new UnauthorizedException();
     if (!foundedUser.isConfirmed) throw new UnauthorizedException();
+    if (foundedUser.banInfo.isBanned) throw new UnauthorizedException();
     const comparePassword = await bcrypt.compare(inputData.password, foundedUser.passwordHash);
 
     if (!comparePassword) throw new UnauthorizedException();
