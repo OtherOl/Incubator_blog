@@ -41,7 +41,7 @@ export class UsersQueryRepository {
     let foundUsers: User[];
     const queryFoundUsers: SelectQueryBuilder<User> = await this.usersRepository
       .createQueryBuilder('u')
-      .select(['u.id', 'u.login', 'u.email', 'u.createdAt'])
+      .select(['u.id', 'u.login', 'u.email', 'u.createdAt', 'u.banInfo'])
       .where('u.login ilike :login', { login: `%${searchLoginTerm}%` })
       .orWhere('u.email ilike :email', { email: `%${searchEmailTerm}%` });
 

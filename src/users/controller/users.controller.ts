@@ -64,18 +64,18 @@ export class UsersController {
   }
 
   @SkipThrottle()
-  @UseGuards(BasicAuthGuard)
-  @Delete(':id')
-  @HttpCode(204)
-  async deleteUser(@Param('id') id: string) {
-    return await this.deleteUserUseCase.deleteUser(id);
-  }
-
-  @SkipThrottle()
   @Put(':id/ban')
   @HttpCode(HttpStatus.NO_CONTENT)
   @UseGuards(BasicAuthGuard)
   async banUser(@Param('id') id: string, @Body() inputData: BanUserInputModel) {
     return await this.banUserUseCase.ban(id, inputData.isBanned, inputData.banReason);
+  }
+
+  @SkipThrottle()
+  @UseGuards(BasicAuthGuard)
+  @Delete(':id')
+  @HttpCode(204)
+  async deleteUser(@Param('id') id: string) {
+    return await this.deleteUserUseCase.deleteUser(id);
   }
 }

@@ -64,7 +64,7 @@ export class UsersRepository {
     await this.usersRepository
       .createQueryBuilder()
       .update(User)
-      .set({ banInfo: () => `jsonb_set("banInfo", '{banDate}', '${new Date().toISOString()}')` })
+      .set({ banInfo: () => `jsonb_set("banInfo", '{banDate}', '"${new Date().toISOString()}"')` })
       .where('id = :userId', { userId })
       .execute();
 

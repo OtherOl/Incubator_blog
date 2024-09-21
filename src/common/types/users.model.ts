@@ -45,7 +45,7 @@ export class BanUserInputModel {
   isBanned: boolean;
 
   @IsString()
-  @MinLength(20)
+  @Length(20)
   banReason: string;
 }
 
