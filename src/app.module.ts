@@ -17,6 +17,7 @@ import { CommentsModule } from './comments/comments.module';
 import { TestingModule } from './testing/testing.module';
 import { PairQuizGameModule } from './game/pairQuizGame/pair-quiz-game.module';
 import { QuizQuestionsModule } from './game/quizQuestions/quiz-questions.module';
+import { BloggerModule } from './blogger/blogger.module';
 
 const { PGHOST, PGDATABASE, PGUSER, PGPASSWORD } = process.env;
 
@@ -64,6 +65,7 @@ const { PGHOST, PGDATABASE, PGUSER, PGPASSWORD } = process.env;
     TestingModule,
     PairQuizGameModule,
     QuizQuestionsModule,
+    BloggerModule,
   ],
   providers: [{ provide: APP_GUARD, useClass: ThrottlerGuard }],
 })

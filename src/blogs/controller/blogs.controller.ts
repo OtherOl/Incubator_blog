@@ -8,9 +8,9 @@ import { AuthService } from '../../auth/application/auth.service';
 @Controller('blogs')
 export class BlogsController {
   constructor(
-    private blogsQueryRepository: BlogsQueryRepository,
-    private postsQueryRepository: PostsQueryRepository,
-    private authService: AuthService,
+    private readonly blogsQueryRepository: BlogsQueryRepository,
+    private readonly postsQueryRepository: PostsQueryRepository,
+    private readonly authService: AuthService,
   ) {}
 
   @SkipThrottle()

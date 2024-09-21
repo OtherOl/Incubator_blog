@@ -5,10 +5,15 @@ import { Blog } from '../domain/blogs.entity';
 
 @Injectable()
 export class CreateBlogUseCase {
-  constructor(private blogsRepository: BlogsRepository) {}
+  constructor(private readonly blogsRepository: BlogsRepository) {}
 
-  async createBlog(inputData: createBlogModel) {
-    const newBlog: blogViewModel = Blog.createNewBlog(inputData);
+  async createBlog(inputData: createBlogModel, userId?: string, login?: string) {
+    let newBlog: blogViewModel;
+    if (!userId) {
+      newBlog = Blog.createNewBlog(inputData);
+    } else {
+      newBlog = Blog.createNewBlog(inputData, userId, login);
+    }
 
     return this.blogsRepository.createBlog(newBlog);
   }

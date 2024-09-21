@@ -19,7 +19,7 @@ export class AuthService {
     return this.jwtService.verify(token);
   }
 
-  async getUserIdByToken(token: string | undefined) {
+  async getUserIdByToken(token: string | undefined): Promise<string> {
     if (!token) throw new UnauthorizedException();
     try {
       const user = await this.jwtService.verify(token);
@@ -29,7 +29,7 @@ export class AuthService {
     }
   }
 
-  async getUserIdForGet(token: string | undefined) {
+  async getUserIdForGet(token: string | undefined): Promise<string> {
     if (!token) return 'fffff3ea02afffffc87fffff';
     try {
       const user = await this.jwtService.verify(token);

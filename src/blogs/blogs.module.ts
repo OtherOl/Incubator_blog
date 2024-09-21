@@ -20,9 +20,12 @@ import { Likes } from '../likes/domain/likes.entity';
 import { SuperAdminBlogsController } from './controller/super-admin.blogs.controller';
 import { BasicAuthGuard } from '../auth/guards/basic-auth.guard';
 import { BasicStrategy } from '../auth/strategies/basic.strategy';
+import { UsersQueryRepository } from '../users/repositories/users.query-repository';
+import { User } from '../users/domain/users.entity';
+import { UpdateBlogOwnerUseCase } from './use-cases/updateBlogOwner.use-case';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Blog, Post, Comment, Likes])],
+  imports: [TypeOrmModule.forFeature([Blog, Post, Comment, Likes, User])],
   controllers: [BlogsController, SuperAdminBlogsController],
   providers: [
     BlogsQueryRepository,
@@ -37,6 +40,8 @@ import { BasicStrategy } from '../auth/strategies/basic.strategy';
     PostsQueryRepository,
     PostsRepository,
     LikesQueryRepository,
+    UpdateBlogOwnerUseCase,
+    UsersQueryRepository,
     BasicAuthGuard,
     BasicStrategy,
   ],

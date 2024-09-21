@@ -32,3 +32,16 @@ export class blogViewModel {
   createdAt: string;
   isMembership: boolean;
 }
+
+export class adminBlogViewModel {
+  id: string;
+  name: string;
+  description: string;
+  websiteUrl: string;
+  createdAt: string;
+  isMembership: boolean;
+  blogOwnerInfo: {
+    userId: string | null;
+    userLogin: string | null;
+  };
+}

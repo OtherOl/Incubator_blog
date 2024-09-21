@@ -14,9 +14,10 @@ import { LikesQueryRepository } from '../likes/repositories/likes.query-reposito
 import { Comment } from '../comments/domain/comments.entity';
 import { User } from '../users/domain/users.entity';
 import { Likes } from '../likes/domain/likes.entity';
+import { Blog } from '../blogs/domain/blogs.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Post, Comment, User, Likes])],
+  imports: [TypeOrmModule.forFeature([Post, Comment, User, Likes, Blog])],
   controllers: [PostsController],
   providers: [
     PostsQueryRepository,

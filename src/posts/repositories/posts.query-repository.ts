@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { postModel } from '../../common/types/posts.model';
 import { paginationModel } from '../../common/types/pagination.model';
 import { commentsModel } from '../../common/types/comments.model';
@@ -8,13 +8,15 @@ import { Repository } from 'typeorm';
 import { Post } from '../domain/posts.entity';
 import { Comment } from '../../comments/domain/comments.entity';
 import { sortDirectionHelper } from '../../common/helpers/sortDirection.helper';
+import { Blog } from '../../blogs/domain/blogs.entity';
 
 @Injectable()
 export class PostsQueryRepository {
   constructor(
-    @InjectRepository(Post) private postsRepository: Repository<Post>,
-    @InjectRepository(Comment) private commentsRepository: Repository<Comment>,
-    private likesQueryRepository: LikesQueryRepository,
+    @InjectRepository(Post) private readonly postsRepository: Repository<Post>,
+    @InjectRepository(Blog) private readonly blogsRepository: Repository<Blog>,
+    @InjectRepository(Comment) private readonly commentsRepository: Repository<Comment>,
+    private readonly likesQueryRepository: LikesQueryRepository,
   ) {}
 
   async getCommentsByPostId(
@@ -161,7 +163,19 @@ export class PostsQueryRepository {
     pageNumber: number,
     pageSize: number,
     userId: string,
+    isBlogger?: boolean,
   ): Promise<paginationModel<postModel>> {
+    if (isBlogger) {
+      const blog = await this.blogsRepository.findOneBy({ id: blogId });
+      if (!blog) throw new NotFoundException("Blog doesn't exists");
+      const isBelong = await this.blogsRepository
+        .createQueryBuilder('b')
+        .select()
+        .where('b.id = :id', { id: blogId })
+        .andWhere('b.blogOwnerInfo ::jsonb @> blogOwnerInfo', { blogOwnerInfo: { userId } })
+        .getOne();
+      if (!isBelong) throw new ForbiddenException("Blog doesn't belong to you");
+    }
     const sortDir = sortDirectionHelper(sortDirection);
     const countPosts: number = await this.postsRepository
       .createQueryBuilder('p')

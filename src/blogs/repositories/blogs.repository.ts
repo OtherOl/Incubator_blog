@@ -19,4 +19,24 @@ export class BlogsRepository {
   async deleteBlogById(blogId: string): Promise<DeleteResult> {
     return await this.blogsRepository.delete({ id: blogId });
   }
+
+  async updateBlogOwnerInfo(blogId: string, userId: string, userLogin: string) {
+    await this.blogsRepository
+      .createQueryBuilder()
+      .update(Blog)
+      .set({
+        blogOwnerInfo: () => `jsonb_set("blogOwnerInfo", '{userId}', '"${userId}"')`,
+      })
+      .where('id = :blogId', { blogId })
+      .execute();
+
+    return await this.blogsRepository
+      .createQueryBuilder()
+      .update(Blog)
+      .set({
+        blogOwnerInfo: () => `jsonb_set("blogOwnerInfo", '{userLogin}', '"${userLogin}"')`,
+      })
+      .where('id = :blogId', { blogId })
+      .execute();
+  }
 }

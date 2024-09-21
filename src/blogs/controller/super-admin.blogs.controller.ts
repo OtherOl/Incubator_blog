@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   HttpCode,
+  HttpStatus,
   Param,
   Post,
   Put,
@@ -25,19 +26,21 @@ import { UpdatePostByBlogIdUseCase } from '../use-cases/updatePostByBlogId.use-c
 import { DeletePostByBlogIdUseCase } from '../use-cases/deletePostByBlogIdUseCase';
 import { Request } from 'express';
 import { AuthService } from '../../auth/application/auth.service';
+import { UpdateBlogOwnerUseCase } from '../use-cases/updateBlogOwner.use-case';
 
 @Controller('sa/blogs')
 export class SuperAdminBlogsController {
   constructor(
-    private blogsQueryRepository: BlogsQueryRepository,
-    private postsQueryRepository: PostsQueryRepository,
-    private authService: AuthService,
-    private createBlogUseCase: CreateBlogUseCase,
-    private createPostForBlogUseCase: CreatePostForBlogUseCase,
-    private updateBlogUseCase: UpdateBlogUseCase,
-    private deleteBlogUseCase: DeleteBlogUseCase,
-    private updatePostByBlogIdUseCase: UpdatePostByBlogIdUseCase,
-    private deletePostByBlogIdUseCase: DeletePostByBlogIdUseCase,
+    private readonly blogsQueryRepository: BlogsQueryRepository,
+    private readonly postsQueryRepository: PostsQueryRepository,
+    private readonly authService: AuthService,
+    private readonly createBlogUseCase: CreateBlogUseCase,
+    private readonly createPostForBlogUseCase: CreatePostForBlogUseCase,
+    private readonly updateBlogUseCase: UpdateBlogUseCase,
+    private readonly deleteBlogUseCase: DeleteBlogUseCase,
+    private readonly updatePostByBlogIdUseCase: UpdatePostByBlogIdUseCase,
+    private readonly deletePostByBlogIdUseCase: DeletePostByBlogIdUseCase,
+    private readonly updateBlogOwnerUseCase: UpdateBlogOwnerUseCase,
   ) {}
 
   @SkipThrottle()
@@ -60,7 +63,16 @@ export class SuperAdminBlogsController {
       query.sortDirection,
       query.pageNumber ? +query.pageNumber : 1,
       query.pageSize ? +query.pageSize : 10,
+      'admin',
     );
+  }
+
+  @SkipThrottle()
+  @UseGuards(BasicAuthGuard)
+  @Put(':id/bind-with-user/:userId')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async updateBlogOwnerInfo(@Param('id') id: string, @Param('userId') userId: string) {
+    return await this.updateBlogOwnerUseCase.update(id, userId);
   }
 
   @SkipThrottle()
