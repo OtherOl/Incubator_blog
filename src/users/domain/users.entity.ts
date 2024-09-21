@@ -15,6 +15,12 @@ export class RecoveryConfirmation {
   expirationDate: string;
 }
 
+class BanUserInfo {
+  isBanned: boolean;
+  banDate: string | null;
+  banReason: string | null;
+}
+
 @Entity({ name: 'User' })
 export class User {
   @PrimaryColumn()
@@ -40,6 +46,9 @@ export class User {
 
   @Column()
   isConfirmed: boolean;
+
+  @Column({ type: 'jsonb' })
+  banInfo: BanUserInfo;
 
   @OneToMany(() => Security, (s) => s.userId, { onDelete: 'CASCADE' })
   sessions: Security[];
@@ -67,6 +76,11 @@ export class User {
       expirationDate: add(new Date(), { minutes: 1000 }).toISOString(),
     };
     user.isConfirmed = isConfirmed;
+    user.banInfo = {
+      isBanned: false,
+      banDate: null,
+      banReason: null,
+    };
 
     return user;
   }

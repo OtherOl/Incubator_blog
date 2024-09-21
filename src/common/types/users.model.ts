@@ -1,4 +1,4 @@
-import { IsEmail, IsString, Length, Matches } from 'class-validator';
+import { IsBoolean, IsEmail, IsString, Length, Matches, MinLength } from 'class-validator';
 
 export class createNewPassword {
   @IsString()
@@ -40,6 +40,15 @@ export class createUserModel {
   email: string;
 }
 
+export class BanUserInputModel {
+  @IsBoolean()
+  isBanned: boolean;
+
+  @IsString()
+  @MinLength(20)
+  banReason: string;
+}
+
 export class userModel {
   id: string;
   login: string;
@@ -55,4 +64,9 @@ export class userModel {
     expirationDate: any;
   };
   isConfirmed: boolean;
+  banInfo: {
+    isBanned: boolean;
+    banDate: string | null;
+    banReason: string | null;
+  };
 }

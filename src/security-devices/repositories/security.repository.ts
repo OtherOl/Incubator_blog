@@ -28,4 +28,8 @@ export class SecurityRepository {
   async deleteSpecifiedSession(deviceId: string): Promise<DeleteResult> {
     return await this.securityRepository.delete({ deviceId });
   }
+
+  async deleteSessionsByUserId(userId: string) {
+    return await this.securityRepository.delete({ userId });
+  }
 }

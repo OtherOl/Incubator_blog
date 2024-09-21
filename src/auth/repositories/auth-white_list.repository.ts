@@ -44,4 +44,8 @@ export class AuthWhiteListRepository {
       .andWhere('aw.deviceId != :deviceId', { deviceId })
       .getMany();
   }
+
+  async deleteAllTokens(userId: string) {
+    return await this.authWhiteListRepository.delete({ userId });
+  }
 }

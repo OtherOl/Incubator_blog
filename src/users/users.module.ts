@@ -10,9 +10,16 @@ import { AuthService } from '../auth/application/auth.service';
 import { UsersRepository } from './repositories/users.repository';
 import { UsersQueryRepository } from './repositories/users.query-repository';
 import { EmailManager } from '../email/emailManager';
+import { BanUserUseCase } from './use-cases/banUser.use-case';
+import { AuthWhiteListRepository } from '../auth/repositories/auth-white_list.repository';
+import { AuthWhiteList } from '../auth/domain/auth-white_list.entity';
+import { AuthBlackListRepository } from '../auth/repositories/auth-black-list-repository.service';
+import { AuthBlackList } from '../auth/domain/auth-black_list.entity';
+import { SecurityRepository } from '../security-devices/repositories/security.repository';
+import { Security } from '../security-devices/domain/security.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User])],
+  imports: [TypeOrmModule.forFeature([User, AuthWhiteList, AuthBlackList, Security])],
   controllers: [UsersController],
   providers: [
     CreateNewPasswordUseCase,
@@ -23,6 +30,10 @@ import { EmailManager } from '../email/emailManager';
     UsersRepository,
     UsersQueryRepository,
     EmailManager,
+    BanUserUseCase,
+    AuthWhiteListRepository,
+    AuthBlackListRepository,
+    SecurityRepository,
   ],
 })
 export class UsersModule {}

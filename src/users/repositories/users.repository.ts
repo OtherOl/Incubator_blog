@@ -52,4 +52,27 @@ export class UsersRepository {
   async updatePassword(userId: string, passwordHash: string): Promise<UpdateResult> {
     return await this.usersRepository.update({ id: userId }, { passwordHash });
   }
+
+  async banUnbanUser(userId: string, isBanned: boolean, banReason: string) {
+    await this.usersRepository
+      .createQueryBuilder()
+      .update(User)
+      .set({ banInfo: () => `jsonb_set("banInfo", '{isBanned}', '${isBanned}')` })
+      .where('id = :userId', { userId })
+      .execute();
+
+    await this.usersRepository
+      .createQueryBuilder()
+      .update(User)
+      .set({ banInfo: () => `jsonb_set("banInfo", '{banDate}', '${new Date().toISOString()}')` })
+      .where('id = :userId', { userId })
+      .execute();
+
+    return await this.usersRepository
+      .createQueryBuilder()
+      .update(User)
+      .set({ banInfo: () => `jsonb_set("banInfo", '{banReason}', '"${banReason}"')` })
+      .where('id = :userId', { userId })
+      .execute();
+  }
 }
