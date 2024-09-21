@@ -60,11 +60,11 @@ export class BloggerController {
   ) {
     const userId: string = await this.authService.getUserIdForGet(req.headers.authorization!.split(' ')[1]);
     return await this.blogsQueryRepo.getAllBlogs(
-      query.searchNameTerm,
+      query.searchNameTerm || '',
       query.sortBy,
       query.sortDirection,
-      query.pageNumber,
-      query.pageSize,
+      query.pageNumber ? +query.pageNumber : 1,
+      query.pageSize ? +query.pageSize : 10,
       userId,
     );
   }

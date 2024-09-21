@@ -13,7 +13,7 @@ export class BlogsQueryRepository {
   async getAllBlogs(
     searchNameTerm: string,
     sortBy: string = 'createdAt',
-    sortDirection: string,
+    sortDirection: string = 'DESC',
     pageNumber: number,
     pageSize: number,
     userId?: string,
@@ -23,7 +23,6 @@ export class BlogsQueryRepository {
     const queryCountBlogs = await this.blogsRepository
       .createQueryBuilder('b')
       .select()
-      .addSelect('b.blogOwnerInFO')
       .where('b.name ilike :name', { name: `%${searchNameTerm}%` });
 
     if (userId && userId !== 'admin') {

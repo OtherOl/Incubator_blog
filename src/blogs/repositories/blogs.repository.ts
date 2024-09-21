@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { blogViewModel, createBlogModel } from '../../common/types/blogs.model';
+import { adminBlogViewModel, blogViewModel, createBlogModel } from '../../common/types/blogs.model';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, Repository, UpdateResult } from 'typeorm';
 import { Blog } from '../domain/blogs.entity';
@@ -8,9 +8,16 @@ import { Blog } from '../domain/blogs.entity';
 export class BlogsRepository {
   constructor(@InjectRepository(Blog) private blogsRepository: Repository<Blog>) {}
 
-  async createBlog(blog: blogViewModel): Promise<blogViewModel> {
+  async createBlog(blog: adminBlogViewModel): Promise<blogViewModel> {
     await this.blogsRepository.insert(blog);
-    return blog;
+    return {
+      id: blog.id,
+      name: blog.name,
+      description: blog.description,
+      websiteUrl: blog.websiteUrl,
+      createdAt: blog.createdAt,
+      isMembership: blog.isMembership,
+    };
   }
   async updateBlog(blogId: string, inputData: createBlogModel): Promise<UpdateResult> {
     return await this.blogsRepository.update({ id: blogId }, inputData);

@@ -1,4 +1,4 @@
-import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { BlogsRepository } from '../repositories/blogs.repository';
 import { createBlogModel } from '../../common/types/blogs.model';
 import { BlogsQueryRepository } from '../repositories/blogs.query-repository';
@@ -18,7 +18,7 @@ export class UpdateBlogUseCase {
     } else {
       const blog = await this.blogsQueryRepository.getBlogByIdAndUserId(blogId, userId);
       //403 потому что в тестах так :/ (тупая херня)
-      if (!blog) throw new ForbiddenException("Blog doesn't belong to you");
+      if (!blog) throw new NotFoundException("Blog doesn't belong to you");
       return this.blogsRepository.updateBlog(blog.id, inputData);
     }
   }
