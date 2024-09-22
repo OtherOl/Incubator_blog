@@ -36,7 +36,14 @@ export class LikesQueryRepository {
       .where('l.postId = :postId', { postId })
       .andWhere('l.type = :type', { type })
       .orderBy('l.addedAt', 'DESC')
-      .limit(3)
       .getMany();
+    // return await this.likesRepository
+    //   .createQueryBuilder('l')
+    //   .select(['l.addedAt', 'l.userId', 'l.login'])
+    //   .where('l.postId = :postId', { postId })
+    //   .andWhere('l.type = :type', { type })
+    //   .orderBy('l.addedAt', 'DESC')
+    //   .limit(3)
+    //   .getMany();
   }
 }

@@ -10,6 +10,8 @@ import { Comment } from '../../comments/entites/comments.entity';
 import { sortDirectionHelper } from '../../common/helpers/sortDirection.helper';
 import { Blog } from '../../blogs/entities/blogs.entity';
 import { IsBannedForPostUseCase } from '../use-cases/isBannedForPost.use-case';
+import { UsersQueryRepository } from '../../users/repositories/users.query-repository';
+import { Likes } from '../../likes/entities/likes.entity';
 
 @Injectable()
 export class PostsQueryRepository {
@@ -19,6 +21,7 @@ export class PostsQueryRepository {
     @InjectRepository(Comment) private readonly commentsRepository: Repository<Comment>,
     private readonly likesQueryRepository: LikesQueryRepository,
     private readonly isBannedForPostUseCase: IsBannedForPostUseCase,
+    private readonly usersQueryRepo: UsersQueryRepository,
   ) {}
 
   async getCommentsByPostId(
@@ -273,6 +276,20 @@ export class PostsQueryRepository {
     let newestLikes;
     likes ? (newestLikes = likes) : (newestLikes = []);
 
+    const whiteLikes: Likes[] = [];
+    const blackLikes: Likes[] = [];
+    if (newestLikes.length > 0) {
+      for (const like of newestLikes) {
+        const user = await this.usersQueryRepo.getFullUserInfoById(like.userId);
+        if (user?.banInfo.isBanned) {
+          blackLikes.push(like);
+        } else {
+          whiteLikes.push(like);
+        }
+      }
+      newestLikes = whiteLikes.slice(0, 3);
+    }
+
     return {
       id: post.id,
       title: post.title,
@@ -282,7 +299,7 @@ export class PostsQueryRepository {
       blogName: post.blogName,
       createdAt: post.createdAt,
       extendedLikesInfo: {
-        likesCount: post.extendedLikesInfo.likesCount,
+        likesCount: post.extendedLikesInfo.likesCount - blackLikes.length,
         dislikesCount: post.extendedLikesInfo.dislikesCount,
         myStatus: likeStatus,
         newestLikes: newestLikes,
