@@ -37,13 +37,9 @@ export class LikesQueryRepository {
       .andWhere('l.type = :type', { type })
       .orderBy('l.addedAt', 'DESC')
       .getMany();
-    // return await this.likesRepository
-    //   .createQueryBuilder('l')
-    //   .select(['l.addedAt', 'l.userId', 'l.login'])
-    //   .where('l.postId = :postId', { postId })
-    //   .andWhere('l.type = :type', { type })
-    //   .orderBy('l.addedAt', 'DESC')
-    //   .limit(3)
-    //   .getMany();
+  }
+
+  async getLikesByCommentId(commentId: string) {
+    return await this.likesRepository.findBy({ commentId });
   }
 }

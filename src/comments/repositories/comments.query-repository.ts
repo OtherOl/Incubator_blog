@@ -5,6 +5,8 @@ import { Repository } from 'typeorm';
 import { Comment } from '../entites/comments.entity';
 import { CommentViewModel } from '../../common/types/comments.model';
 import { IsBannedForCommentsUseCase } from '../use-cases/isBannedForComments.use-case';
+import { Likes } from '../../likes/entities/likes.entity';
+import { UsersQueryRepository } from '../../users/repositories/users.query-repository';
 
 @Injectable()
 export class CommentsQueryRepository {
@@ -12,6 +14,7 @@ export class CommentsQueryRepository {
     @InjectRepository(Comment) private readonly commentsRepository: Repository<Comment>,
     private readonly likesQueryRepository: LikesQueryRepository,
     private readonly isBannedForCommentsUseCase: IsBannedForCommentsUseCase,
+    private readonly usersQueryRepo: UsersQueryRepository,
   ) {}
 
   async getCommentByIdService(id: string, userId: string): Promise<CommentViewModel> {
@@ -27,6 +30,17 @@ export class CommentsQueryRepository {
     } else {
       likeStatus = like.type;
     }
+    const allLikes = await this.likesQueryRepository.getLikesByCommentId(comment.id);
+    const blackLikes: Likes[] = [];
+    if (allLikes.length > 0) {
+      for (const like of allLikes) {
+        const user = await this.usersQueryRepo.getFullUserInfoById(like.userId);
+        if (user?.banInfo.isBanned) {
+          blackLikes.push(like);
+        }
+      }
+    }
+
     return {
       id: comment.id,
       content: comment.content,
@@ -36,7 +50,7 @@ export class CommentsQueryRepository {
       },
       createdAt: comment.createdAt,
       likesInfo: {
-        likesCount: comment.likesInfo.likesCount,
+        likesCount: comment.likesInfo.likesCount - blackLikes.length,
         dislikesCount: comment.likesInfo.dislikesCount,
         myStatus: likeStatus,
       },
