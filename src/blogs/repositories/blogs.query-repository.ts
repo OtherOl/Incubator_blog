@@ -3,12 +3,12 @@ import { adminBlogViewModel, blogViewModel } from '../../common/types/blogs.mode
 import { paginationModel } from '../../common/types/pagination.model';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, SelectQueryBuilder } from 'typeorm';
-import { Blog } from '../domain/blogs.entity';
+import { Blog } from '../entities/blogs.entity';
 import { sortDirectionHelper } from '../../common/helpers/sortDirection.helper';
 
 @Injectable()
 export class BlogsQueryRepository {
-  constructor(@InjectRepository(Blog) private blogsRepository: Repository<Blog>) {}
+  constructor(@InjectRepository(Blog) private readonly blogsRepository: Repository<Blog>) {}
 
   async getAllBlogs(
     searchNameTerm: string,

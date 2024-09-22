@@ -3,7 +3,7 @@ import { ConfirmationCode, userModel } from '../../common/types/users.model';
 import { paginationModel } from '../../common/types/pagination.model';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Brackets, Repository, SelectQueryBuilder } from 'typeorm';
-import { User } from '../domain/users.entity';
+import { User } from '../entities/users.entity';
 import { sortDirectionHelper } from '../../common/helpers/sortDirection.helper';
 
 @Injectable()
@@ -22,8 +22,6 @@ export class UsersQueryRepository {
     let countUsers: number;
     const sortDir = sortDirectionHelper(sortDirection);
     const queryCountUsers: SelectQueryBuilder<User> = await this.usersRepository.createQueryBuilder('u');
-    // .where('u.login ilike :login', { login: `%${searchLoginTerm}%` })
-    // .orWhere('u.email ilike :email', { email: `%${searchEmailTerm}%` });
 
     if (banStatus === 'all') {
       countUsers = await queryCountUsers
@@ -60,8 +58,6 @@ export class UsersQueryRepository {
     const queryFoundUsers: SelectQueryBuilder<User> = await this.usersRepository
       .createQueryBuilder('u')
       .select(['u.id', 'u.login', 'u.email', 'u.createdAt', 'u.banInfo']);
-    // .where('u.login ilike :login', { login: `%${searchLoginTerm}%` })
-    // .orWhere('u.email ilike :email', { email: `%${searchEmailTerm}%` });
 
     if (banStatus === 'all') {
       foundUsers = await queryFoundUsers

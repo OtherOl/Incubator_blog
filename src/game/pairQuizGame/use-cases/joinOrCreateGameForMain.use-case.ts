@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { GameStatus, PlayerType, QuestionsViewModel } from '../../../common/types/game.model';
-import { PairQuizGame } from '../domain/pairQuizGame.entity';
+import { PairQuizGame } from '../entities/pairQuizGame.entity';
 import { PairQuizGameRepository } from '../repositories/pairQuizGame.repository';
 import { PairQuizGameQueryRepository } from '../repositories/pairQuizGame.query-repository';
-import { User } from '../../../users/domain/users.entity';
+import { User } from '../../../users/entities/users.entity';
 import { QuizQuestionsQueryRepository } from '../../quizQuestions/repositories/quizQuestions.query-repository';
-import { PlayerEntity } from '../domain/player.entity';
+import { PlayerEntity } from '../entities/player.entity';
 
 @Injectable()
 export class JoinOrCreateGameForMainUseCase {

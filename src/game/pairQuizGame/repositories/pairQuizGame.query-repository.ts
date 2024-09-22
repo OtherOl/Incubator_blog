@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { PairQuizGame } from '../domain/pairQuizGame.entity';
+import { PairQuizGame } from '../entities/pairQuizGame.entity';
 import { Brackets, Repository, SelectQueryBuilder } from 'typeorm';
 import { GameStatus, PlayerType } from '../../../common/types/game.model';
-import { PlayerEntity } from '../domain/player.entity';
+import { PlayerEntity } from '../entities/player.entity';
 
 @Injectable()
 export class PairQuizGameQueryRepository {

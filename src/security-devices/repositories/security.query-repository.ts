@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Security } from '../domain/security.entity';
+import { Security } from '../entities/security.entity';
 
 @Injectable()
 export class SecurityQueryRepository {

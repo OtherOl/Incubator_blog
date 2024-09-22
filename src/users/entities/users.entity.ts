@@ -1,9 +1,9 @@
 import { v4 as uuidv4 } from 'uuid';
 import { add } from 'date-fns/add';
 import { Column, Entity, OneToMany, PrimaryColumn } from 'typeorm';
-import { Likes } from '../../likes/domain/likes.entity';
-import { AuthWhiteList } from '../../auth/domain/auth-white_list.entity';
-import { Security } from '../../security-devices/domain/security.entity';
+import { Likes } from '../../likes/entities/likes.entity';
+import { AuthWhiteList } from '../../auth/entities/auth-white_list.entity';
+import { Security } from '../../security-devices/entities/security.entity';
 
 export class EmailConfirmation {
   confirmationCode: string;

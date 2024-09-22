@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CommentLikes, PostLikes } from '../../common/types/likes.model';
 import { InjectRepository } from '@nestjs/typeorm';
 import { InsertResult, Repository, UpdateResult } from 'typeorm';
-import { Likes } from '../domain/likes.entity';
+import { Likes } from '../entities/likes.entity';
 
 @Injectable()
 export class LikesRepository {

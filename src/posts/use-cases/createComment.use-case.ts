@@ -3,7 +3,7 @@ import { PostsQueryRepository } from '../repositories/posts.query-repository';
 import { UsersQueryRepository } from '../../users/repositories/users.query-repository';
 import { PostsRepository } from '../repositories/posts.repository';
 import { commentsModel, createCommentModel } from '../../common/types/comments.model';
-import { Comment } from '../../comments/domain/comments.entity';
+import { Comment } from '../../comments/entites/comments.entity';
 
 @Injectable()
 export class CreateCommentUseCase {

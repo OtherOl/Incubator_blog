@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { PairQuizGame } from '../domain/pairQuizGame.entity';
+import { PairQuizGame } from '../entities/pairQuizGame.entity';
 import { Repository } from 'typeorm';
 import { AnswerViewModel, GameStatus, PlayerGameModel, PlayerType } from '../../../common/types/game.model';
-import { Answer } from '../domain/answers.entity';
-import { PlayerEntity } from '../domain/player.entity';
+import { Answer } from '../entities/answers.entity';
+import { PlayerEntity } from '../entities/player.entity';
 import { add } from 'date-fns/add';
 
 @Injectable()

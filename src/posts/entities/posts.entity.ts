@@ -1,8 +1,8 @@
 import { v4 as uuidv4 } from 'uuid';
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryColumn } from 'typeorm';
-import { Blog } from '../../blogs/domain/blogs.entity';
-import { Likes } from '../../likes/domain/likes.entity';
-import { Comment } from '../../comments/domain/comments.entity';
+import { Blog } from '../../blogs/entities/blogs.entity';
+import { Likes } from '../../likes/entities/likes.entity';
+import { Comment } from '../../comments/entites/comments.entity';
 
 export class LikesInfo {
   likesCount: number;
@@ -37,10 +37,6 @@ export class Post {
 
   @Column()
   blogName: string;
-
-  // @ManyToOne(() => Blog, (b) => b.posts)
-  // @JoinColumn({ name: 'blogName' })
-  // blogsName: Blog;
 
   @Column()
   createdAt: string;

@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Likes } from '../domain/likes.entity';
+import { Likes } from '../entities/likes.entity';
 import { LikesRepository } from '../repositories/likes.repository';
 
 @Injectable()

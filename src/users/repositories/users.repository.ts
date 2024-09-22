@@ -3,7 +3,7 @@ import { userModel } from '../../common/types/users.model';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, Repository, UpdateResult } from 'typeorm';
 import { add } from 'date-fns/add';
-import { User } from '../domain/users.entity';
+import { User } from '../entities/users.entity';
 
 @Injectable()
 export class UsersRepository {

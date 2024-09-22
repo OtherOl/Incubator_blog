@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { QuizQuestionsController } from './controller/quizQuestions.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { QuizQuestions } from './domain/quizQuestions.entity';
+import { QuizQuestions } from './entities/quizQuestions.entity';
 import { QuizQuestionsRepository } from './repositories/quizQuestions.repository';
 import { QuizQuestionsQueryRepository } from './repositories/quizQuestions.query-repository';
 import { CreateQuizQuestionsUseCase } from './use-cases/createQuizQuestions.use-case';

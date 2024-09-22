@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { securityViewModel } from '../../common/types/security.model';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, InsertResult, Repository, UpdateResult } from 'typeorm';
-import { Security } from '../domain/security.entity';
+import { Security } from '../entities/security.entity';
 
 @Injectable()
 export class SecurityRepository {

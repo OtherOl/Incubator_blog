@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { BlogsRepository } from '../repositories/blogs.repository';
 import { adminBlogViewModel, createBlogModel } from '../../common/types/blogs.model';
-import { Blog } from '../domain/blogs.entity';
+import { Blog } from '../entities/blogs.entity';
 
 @Injectable()
 export class CreateBlogUseCase {

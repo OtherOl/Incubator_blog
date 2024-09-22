@@ -1,7 +1,7 @@
 import { INestApplication } from '@nestjs/common';
 import { beforeGetAppAndCleanDb, questionCreateModel } from './utils/test-utils';
 import request from 'supertest';
-import { QuizQuestions } from '../src/game/quizQuestions/domain/quizQuestions.entity';
+import { QuizQuestions } from '../src/game/quizQuestions/entities/quizQuestions.entity';
 import { beforeAll, describe, expect, it } from '@jest/globals';
 
 jest.setTimeout(20000);

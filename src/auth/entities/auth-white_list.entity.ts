@@ -1,5 +1,5 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { User } from '../../users/domain/users.entity';
+import { User } from '../../users/entities/users.entity';
 
 @Entity({ name: 'AuthWhiteList' })
 export class AuthWhiteList {

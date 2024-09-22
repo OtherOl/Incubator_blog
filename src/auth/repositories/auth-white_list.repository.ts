@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { AuthBlackListRepository } from './auth-black-list-repository.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, Repository } from 'typeorm';
-import { AuthWhiteList } from '../domain/auth-white_list.entity';
+import { AuthWhiteList } from '../entities/auth-white_list.entity';
 
 @Injectable()
 export class AuthWhiteListRepository {

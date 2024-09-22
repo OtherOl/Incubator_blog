@@ -2,7 +2,7 @@ import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/commo
 import { BlogsQueryRepository } from '../repositories/blogs.query-repository';
 import { PostsRepository } from '../../posts/repositories/posts.repository';
 import { createBlogPostModel } from '../../common/types/posts.model';
-import { Post } from '../../posts/domain/posts.entity';
+import { Post } from '../../posts/entities/posts.entity';
 
 @Injectable()
 export class CreatePostForBlogUseCase {

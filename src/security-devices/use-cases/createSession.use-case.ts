@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { AuthService } from '../../auth/application/auth.service';
 import { SecurityRepository } from '../repositories/security.repository';
 import { securityViewModel } from '../../common/types/security.model';
-import { Security } from '../domain/security.entity';
+import { Security } from '../entities/security.entity';
 
 @Injectable()
 export class CreateSessionUseCase {

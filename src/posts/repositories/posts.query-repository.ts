@@ -5,10 +5,11 @@ import { commentsModel } from '../../common/types/comments.model';
 import { LikesQueryRepository } from '../../likes/repositories/likes.query-repository';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Post } from '../domain/posts.entity';
-import { Comment } from '../../comments/domain/comments.entity';
+import { Post } from '../entities/posts.entity';
+import { Comment } from '../../comments/entites/comments.entity';
 import { sortDirectionHelper } from '../../common/helpers/sortDirection.helper';
-import { Blog } from '../../blogs/domain/blogs.entity';
+import { Blog } from '../../blogs/entities/blogs.entity';
+import { IsBannedForPostUseCase } from '../use-cases/isBannedForPost.use-case';
 
 @Injectable()
 export class PostsQueryRepository {
@@ -17,6 +18,7 @@ export class PostsQueryRepository {
     @InjectRepository(Blog) private readonly blogsRepository: Repository<Blog>,
     @InjectRepository(Comment) private readonly commentsRepository: Repository<Comment>,
     private readonly likesQueryRepository: LikesQueryRepository,
+    private readonly isBannedForPostUseCase: IsBannedForPostUseCase,
   ) {}
 
   async getCommentsByPostId(
@@ -264,6 +266,8 @@ export class PostsQueryRepository {
     const post = await this.postsRepository.findOneBy({ id: postId });
     const like = await this.likesQueryRepository.getLikeByPostId(userId, postId);
     if (!post) throw new NotFoundException("Post doesn't exists");
+    await this.isBannedForPostUseCase.check(post.blogId);
+
     like ? (likeStatus = like.type) : (likeStatus = 'None');
     const likes = await this.likesQueryRepository.getNewestLikeForCurrentPost(postId, 'Like');
     let newestLikes;

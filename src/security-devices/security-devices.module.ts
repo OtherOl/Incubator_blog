@@ -6,13 +6,13 @@ import { CreateSessionUseCase } from './use-cases/createSession.use-case';
 import { DeleteSessionByIdUseCase } from './use-cases/deleteSessionById.use-case';
 import { DeleteTokensExceptOneUseCase } from './use-cases/deleteTokensExceptOne.use-case';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Security } from './domain/security.entity';
+import { Security } from './entities/security.entity';
 import { AuthService } from '../auth/application/auth.service';
 import { AuthWhiteListRepository } from '../auth/repositories/auth-white_list.repository';
 import { DecodeRefreshTokenUseCase } from '../auth/use-cases/decodeRefreshToken.use-case';
 import { AuthBlackListRepository } from '../auth/repositories/auth-black-list-repository.service';
-import { AuthWhiteList } from '../auth/domain/auth-white_list.entity';
-import { AuthBlackList } from '../auth/domain/auth-black_list.entity';
+import { AuthWhiteList } from '../auth/entities/auth-white_list.entity';
+import { AuthBlackList } from '../auth/entities/auth-black_list.entity';
 import { GetDeviceIdUseCase } from '../auth/use-cases/getDeviceId.use-case';
 
 @Module({

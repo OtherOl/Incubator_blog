@@ -1,6 +1,6 @@
 import { IsNotEmpty, IsString, Length } from 'class-validator';
 import { Transform, TransformFnParams } from 'class-transformer';
-import { CommentatorInfo, LikesInfo } from '../../comments/domain/comments.entity';
+import { CommentatorInfo, LikesInfo } from '../../comments/entites/comments.entity';
 
 export class createCommentModel {
   @IsNotEmpty()

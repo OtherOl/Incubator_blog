@@ -10,15 +10,16 @@ import { UpdatePostByBlogIdUseCase } from '../blogs/use-cases/updatePostByBlogId
 import { DeletePostByBlogIdUseCase } from '../blogs/use-cases/deletePostByBlogIdUseCase';
 import { BloggerController } from './controller/blogger.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Blog } from '../blogs/domain/blogs.entity';
-import { Post } from '../posts/domain/posts.entity';
-import { Comment } from '../comments/domain/comments.entity';
-import { Likes } from '../likes/domain/likes.entity';
+import { Blog } from '../blogs/entities/blogs.entity';
+import { Post } from '../posts/entities/posts.entity';
+import { Comment } from '../comments/entites/comments.entity';
+import { Likes } from '../likes/entities/likes.entity';
 import { BlogsRepository } from '../blogs/repositories/blogs.repository';
 import { PostsRepository } from '../posts/repositories/posts.repository';
 import { LikesQueryRepository } from '../likes/repositories/likes.query-repository';
-import { User } from '../users/domain/users.entity';
+import { User } from '../users/entities/users.entity';
 import { UsersQueryRepository } from '../users/repositories/users.query-repository';
+import { IsBannedForPostUseCase } from '../posts/use-cases/isBannedForPost.use-case';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Blog, Post, Comment, Likes, User])],
@@ -37,6 +38,7 @@ import { UsersQueryRepository } from '../users/repositories/users.query-reposito
     CreatePostForBlogUseCase,
     UpdatePostByBlogIdUseCase,
     DeletePostByBlogIdUseCase,
+    IsBannedForPostUseCase,
   ],
 })
 export class BloggerModule {}

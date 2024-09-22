@@ -3,8 +3,8 @@ import { createBlogPostModel, postModel } from '../../common/types/posts.model';
 import { commentsModel, CommentViewModel } from '../../common/types/comments.model';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, Repository, UpdateResult } from 'typeorm';
-import { Post } from '../domain/posts.entity';
-import { Comment } from '../../comments/domain/comments.entity';
+import { Post } from '../entities/posts.entity';
+import { Comment } from '../../comments/entites/comments.entity';
 
 @Injectable()
 export class PostsRepository {

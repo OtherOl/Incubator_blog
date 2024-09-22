@@ -8,7 +8,7 @@ import {
 import { userModel } from '../src/common/types/users.model';
 import request from 'supertest';
 import { GameViewModel, QuestionsViewModel } from '../src/common/types/game.model';
-import { QuizQuestions } from '../src/game/quizQuestions/domain/quizQuestions.entity';
+import { QuizQuestions } from '../src/game/quizQuestions/entities/quizQuestions.entity';
 import { beforeAll, describe, expect, it, jest } from '@jest/globals';
 
 jest.setTimeout(25000);

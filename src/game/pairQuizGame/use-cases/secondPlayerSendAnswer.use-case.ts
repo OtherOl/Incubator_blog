@@ -1,11 +1,11 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
 import { AnswerStatus, QuestionsViewModel } from '../../../common/types/game.model';
-import { Answer } from '../domain/answers.entity';
+import { Answer } from '../entities/answers.entity';
 import { PairQuizGameRepository } from '../repositories/pairQuizGame.repository';
 import { QuizQuestionsQueryRepository } from '../../quizQuestions/repositories/quizQuestions.query-repository';
 import { ChangeStatusToFinishedUseCase } from './changeStatusToFinished.use-case';
 import { ChangeAnswerStatusSecondPlayerUseCase } from './changeAnswerStatusSecondPlayer.use-case';
-import { PlayerEntity } from '../domain/player.entity';
+import { PlayerEntity } from '../entities/player.entity';
 
 @Injectable()
 export class SecondPlayerSendAnswerUseCase {

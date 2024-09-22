@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { adminBlogViewModel, blogViewModel, createBlogModel } from '../../common/types/blogs.model';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, Repository, UpdateResult } from 'typeorm';
-import { Blog } from '../domain/blogs.entity';
+import { Blog } from '../entities/blogs.entity';
 
 @Injectable()
 export class BlogsRepository {

@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
-import { Post } from '../../posts/domain/posts.entity';
-import { User } from '../../users/domain/users.entity';
+import { Post } from '../../posts/entities/posts.entity';
+import { User } from '../../users/entities/users.entity';
 
 @Entity({ name: 'Likes' })
 export class Likes {

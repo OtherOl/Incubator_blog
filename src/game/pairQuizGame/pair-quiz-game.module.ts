@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { PairQuizGameController } from './controller/pairQuizGame.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Answer } from './domain/answers.entity';
-import { PairQuizGame } from './domain/pairQuizGame.entity';
-import { PlayerEntity } from './domain/player.entity';
+import { Answer } from './entities/answers.entity';
+import { PairQuizGame } from './entities/pairQuizGame.entity';
+import { PlayerEntity } from './entities/player.entity';
 import { PairQuizGameRepository } from './repositories/pairQuizGame.repository';
 import { PairQuizGameQueryRepository } from './repositories/pairQuizGame.query-repository';
 import { ChangeAnswerStatusFirstPlayerUseCase } from './use-cases/changeAnswerStatusFirstPlayer.use-case';
@@ -24,8 +24,8 @@ import { AuthService } from '../../auth/application/auth.service';
 import { UsersQueryRepository } from '../../users/repositories/users.query-repository';
 import { QuizQuestionsQueryRepository } from '../quizQuestions/repositories/quizQuestions.query-repository';
 import { UsersRepository } from '../../users/repositories/users.repository';
-import { User } from '../../users/domain/users.entity';
-import { QuizQuestions } from '../quizQuestions/domain/quizQuestions.entity';
+import { User } from '../../users/entities/users.entity';
+import { QuizQuestions } from '../quizQuestions/entities/quizQuestions.entity';
 import { GetAllQuestionsUseCase } from '../quizQuestions/use-cases/getAllQuestions.use-case';
 
 @Module({

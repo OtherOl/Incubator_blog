@@ -2,19 +2,22 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { LikesQueryRepository } from '../../likes/repositories/likes.query-repository';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Comment } from '../domain/comments.entity';
+import { Comment } from '../entites/comments.entity';
 import { CommentViewModel } from '../../common/types/comments.model';
+import { IsBannedForCommentsUseCase } from '../use-cases/isBannedForComments.use-case';
 
 @Injectable()
 export class CommentsQueryRepository {
   constructor(
-    @InjectRepository(Comment) private commentsRepository: Repository<Comment>,
-    private likesQueryRepository: LikesQueryRepository,
+    @InjectRepository(Comment) private readonly commentsRepository: Repository<Comment>,
+    private readonly likesQueryRepository: LikesQueryRepository,
+    private readonly isBannedForCommentsUseCase: IsBannedForCommentsUseCase,
   ) {}
 
   async getCommentByIdService(id: string, userId: string): Promise<CommentViewModel> {
     const comment = await this.commentsRepository.findOneBy({ id });
     if (!comment) throw new NotFoundException("Comment doesn't exists");
+    await this.isBannedForCommentsUseCase.check(comment.commentatorInfo.userId);
 
     let likeStatus: string;
 

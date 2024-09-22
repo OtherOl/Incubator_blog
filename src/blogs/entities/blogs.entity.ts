@@ -1,7 +1,7 @@
 import { createBlogModel } from '../../common/types/blogs.model';
 import { v4 as uuidv4 } from 'uuid';
 import { Column, Entity, OneToMany, PrimaryColumn } from 'typeorm';
-import { Post } from '../../posts/domain/posts.entity';
+import { Post } from '../../posts/entities/posts.entity';
 
 class blogOwnerInfo {
   userId: string | null;

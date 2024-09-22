@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { QuizQuestions } from '../domain/quizQuestions.entity';
+import { QuizQuestions } from '../entities/quizQuestions.entity';
 import { Repository } from 'typeorm';
 import { CreateQuestionModel } from '../../../common/types/game.model';
 

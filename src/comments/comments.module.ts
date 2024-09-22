@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { CommentsController } from './controller/comments.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Comment } from './domain/comments.entity';
+import { Comment } from './entites/comments.entity';
 import { CommentsRepository } from './repositories/comments.repository';
 import { CommentsQueryRepository } from './repositories/comments.query-repository';
 import { DeleteCommentUseCase } from './use-cases/deleteComment.use-case';
@@ -12,8 +12,9 @@ import { LikesQueryRepository } from '../likes/repositories/likes.query-reposito
 import { UsersQueryRepository } from '../users/repositories/users.query-repository';
 import { LikesRepository } from '../likes/repositories/likes.repository';
 import { LikesService } from '../likes/application/likes.service';
-import { Likes } from '../likes/domain/likes.entity';
-import { User } from '../users/domain/users.entity';
+import { Likes } from '../likes/entities/likes.entity';
+import { User } from '../users/entities/users.entity';
+import { IsBannedForCommentsUseCase } from './use-cases/isBannedForComments.use-case';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Comment, Likes, User])],
@@ -29,6 +30,7 @@ import { User } from '../users/domain/users.entity';
     LikesRepository,
     LikesService,
     UsersQueryRepository,
+    IsBannedForCommentsUseCase,
   ],
 })
 export class CommentsModule {}
