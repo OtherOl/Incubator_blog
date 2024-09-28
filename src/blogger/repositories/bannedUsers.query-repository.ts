@@ -31,14 +31,16 @@ export class BannedUsersQueryRepository {
       .createQueryBuilder('b')
       .select()
       .where({ blogId })
-      .andWhere('b.login ilike :login', { login: `${searchLoginTerm}` })
+      .andWhere('b.login ilike :login', { login: `%${searchLoginTerm}%` })
+      .andWhere("b.banInfo ->> 'isBanned' = :isBanned", { isBanned: true })
       .getCount();
 
     const bannedUsers = await this.bannedUsersRepo
       .createQueryBuilder('b')
       .select(['b.id', 'b.login', 'b.banInfo'])
       .where({ blogId })
-      .andWhere('b.login ilike :login', { login: `${searchLoginTerm}` })
+      .andWhere('b.login ilike :login', { login: `%${searchLoginTerm}%` })
+      .andWhere("b.banInfo ->> 'isBanned' = :isBanned", { isBanned: true })
       .orderBy(`b.${sortBy}`, sortDir)
       .limit(pageSize)
       .offset((pageNumber - 1) * pageSize)
