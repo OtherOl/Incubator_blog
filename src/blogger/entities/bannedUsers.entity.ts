@@ -7,9 +7,6 @@ export class BannedUsersEntity {
   id: string;
 
   @Column()
-  userId: string;
-
-  @Column()
   login: string;
 
   @Column({ type: 'jsonb' })
@@ -25,7 +22,6 @@ export class BannedUsersEntity {
     const bannedUser = new BannedUsersEntity();
 
     bannedUser.id = userId;
-    bannedUser.userId = userId;
     bannedUser.login = login;
     bannedUser.banInfo = {
       isBanned: false,

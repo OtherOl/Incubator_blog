@@ -11,11 +11,11 @@ export class BannedUsersQueryRepository {
   ) {}
 
   async getBannedUserByUserIdAndBlogId(userId: string, blogId: string) {
-    return await this.bannedUsersRepo.findOneBy({ userId, blogId });
+    return await this.bannedUsersRepo.findOneBy({ id: userId, blogId });
   }
 
   async isExists(userId: string, blogId: string): Promise<boolean> {
-    return await this.bannedUsersRepo.existsBy({ userId, blogId });
+    return await this.bannedUsersRepo.existsBy({ id: userId, blogId });
   }
 
   async getAllBannedUsers(
