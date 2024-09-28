@@ -27,6 +27,7 @@ export class BanUnbanUserUseCase {
 
     const user = await this.usersQueryRepo.getUserById(userId);
     if (!user) throw new NotFoundException("User doesn't exists");
+
     const bannedUser = await this.bannedUsersQueryRepo.getBannedUserByUserIdAndBlogId(user.id, blog.id);
     if (!bannedUser) {
       const newBannedUser = BannedUsersEntity.createBannedUser(user.id, user.login, blog.id);

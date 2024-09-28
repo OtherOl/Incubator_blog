@@ -11,11 +11,11 @@ export class BannedUsersQueryRepository {
   ) {}
 
   async getBannedUserByUserIdAndBlogId(userId: string, blogId: string) {
-    return await this.bannedUsersRepo.findOneBy({ id: userId, blogId });
+    return await this.bannedUsersRepo.findOneBy({ userId, blogId });
   }
 
   async isExists(userId: string, blogId: string): Promise<boolean> {
-    return await this.bannedUsersRepo.existsBy({ id: userId, blogId });
+    return await this.bannedUsersRepo.existsBy({ userId, blogId });
   }
 
   async getAllBannedUsers(
@@ -37,14 +37,16 @@ export class BannedUsersQueryRepository {
 
     const bannedUsers = await this.bannedUsersRepo
       .createQueryBuilder('b')
-      .select(['b.id', 'b.login', 'b.banInfo'])
+      .select('b.userId', 'id')
+      .addSelect('b.login', 'login')
+      .addSelect('b.banInfo', 'banInfo')
       .where({ blogId })
       .andWhere('b.login ilike :login', { login: `%${searchLoginTerm}%` })
       .andWhere("b.banInfo ->> 'isBanned' = :isBanned", { isBanned: true })
       .orderBy(`b.${sortBy}`, sortDir)
       .limit(pageSize)
       .offset((pageNumber - 1) * pageSize)
-      .getMany();
+      .getRawMany();
 
     return {
       pagesCount: Math.ceil(Number(countUsers / pageSize)),
