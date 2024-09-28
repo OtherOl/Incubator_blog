@@ -27,7 +27,7 @@ export class BloggerUsersController {
   ) {}
 
   @SkipThrottle()
-  @Put('users/:id/ban')
+  @Put(':id/ban')
   @HttpCode(HttpStatus.NO_CONTENT)
   @UseGuards(AccessTokenGuard)
   async banUnbanUser(
