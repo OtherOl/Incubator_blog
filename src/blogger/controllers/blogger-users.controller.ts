@@ -52,6 +52,7 @@ export class BloggerUsersController {
   @HttpCode(HttpStatus.OK)
   @UseGuards(AccessTokenGuard)
   async getBannedUsers(
+    @Req() req: Request,
     @Param('id') id: string,
     @Query()
     query: {
@@ -62,6 +63,9 @@ export class BloggerUsersController {
       pageSize: number;
     },
   ) {
+    const blogOwnerId: string = await this.authService.getUserIdByToken(
+      req.headers.authorization!.split(' ')[1],
+    );
     return await this.bannedUsersQueryRepo.getAllBannedUsers(
       id,
       query.searchLoginTerm || '',
@@ -69,6 +73,7 @@ export class BloggerUsersController {
       query.sortDirection,
       query.pageNumber ? +query.pageNumber : 1,
       query.pageSize ? +query.pageSize : 10,
+      blogOwnerId,
     );
   }
 }

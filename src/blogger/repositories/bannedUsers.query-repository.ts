@@ -1,13 +1,15 @@
-import { Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { BannedUsersEntity } from '../entities/bannedUsers.entity';
 import { Repository } from 'typeorm';
 import { sortDirectionHelper } from '../../common/helpers/sortDirection.helper';
+import { Blog } from '../../blogs/entities/blogs.entity';
 
 @Injectable()
 export class BannedUsersQueryRepository {
   constructor(
     @InjectRepository(BannedUsersEntity) private readonly bannedUsersRepo: Repository<BannedUsersEntity>,
+    @InjectRepository(Blog) private readonly blogsRepo: Repository<Blog>,
   ) {}
 
   async getBannedUserByUserIdAndBlogId(userId: string, blogId: string) {
@@ -25,7 +27,21 @@ export class BannedUsersQueryRepository {
     sortDirection: string = 'DESC',
     pageNumber: number,
     pageSize: number,
+    userId: string,
   ) {
+    const isExists = await this.bannedUsersRepo.existsBy({ blogId });
+    if (!isExists) throw new NotFoundException();
+
+    const blog = await this.blogsRepo
+      .createQueryBuilder('b')
+      .select('b')
+      .addSelect('b.blogOwnerInfo')
+      .where('id = :id', { id: blogId })
+      .getOne();
+
+    if (!blog) throw new NotFoundException();
+    if (blog.blogOwnerInfo.userId !== userId) throw new ForbiddenException();
+
     const sortDir = sortDirectionHelper(sortDirection);
     const countUsers = await this.bannedUsersRepo
       .createQueryBuilder('b')
