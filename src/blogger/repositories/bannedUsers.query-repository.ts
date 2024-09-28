@@ -29,9 +29,6 @@ export class BannedUsersQueryRepository {
     pageSize: number,
     userId: string,
   ) {
-    const isExists = await this.bannedUsersRepo.existsBy({ blogId });
-    if (!isExists) throw new NotFoundException();
-
     const blog = await this.blogsRepo
       .createQueryBuilder('b')
       .select('b')
@@ -41,6 +38,9 @@ export class BannedUsersQueryRepository {
 
     if (!blog) throw new NotFoundException();
     if (blog.blogOwnerInfo.userId !== userId) throw new ForbiddenException();
+
+    const isExists = await this.bannedUsersRepo.existsBy({ blogId });
+    if (!isExists) throw new NotFoundException();
 
     const sortDir = sortDirectionHelper(sortDirection);
     const countUsers = await this.bannedUsersRepo
