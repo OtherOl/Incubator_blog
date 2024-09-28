@@ -1,9 +1,9 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, PrimaryColumn } from 'typeorm';
 import { BanUserInfo } from '../../users/entities/users.entity';
 
 @Entity()
 export class BannedUsersEntity {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryColumn()
   id: string;
 
   @Column()
@@ -24,6 +24,7 @@ export class BannedUsersEntity {
   static createBannedUser(userId: string, login: string, blogId: string) {
     const bannedUser = new BannedUsersEntity();
 
+    bannedUser.id = userId;
     bannedUser.userId = userId;
     bannedUser.login = login;
     bannedUser.banInfo = {
