@@ -8,7 +8,7 @@ import { DeleteBlogUseCase } from '../blogs/use-cases/deleteBlog.use-case';
 import { CreatePostForBlogUseCase } from '../blogs/use-cases/createPostForBlog.use-case';
 import { UpdatePostByBlogIdUseCase } from '../blogs/use-cases/updatePostByBlogId.use-case';
 import { DeletePostByBlogIdUseCase } from '../blogs/use-cases/deletePostByBlogIdUseCase';
-import { BloggerController } from './controller/blogger.controller';
+import { BloggerBlogsController } from './controllers/blogger-blogs.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Blog } from '../blogs/entities/blogs.entity';
 import { Post } from '../posts/entities/posts.entity';
@@ -20,10 +20,15 @@ import { LikesQueryRepository } from '../likes/repositories/likes.query-reposito
 import { User } from '../users/entities/users.entity';
 import { UsersQueryRepository } from '../users/repositories/users.query-repository';
 import { IsBannedForPostUseCase } from '../posts/use-cases/isBannedForPost.use-case';
+import { BanUnbanUserUseCase } from './use-cases/ban-unban-user.use-case';
+import { UsersRepository } from '../users/repositories/users.repository';
+import { BannedUsersEntity } from './entities/bannedUsers.entity';
+import { BannedUsersRepository } from './repositories/bannedUsers.repository';
+import { BannedUsersQueryRepository } from './repositories/bannedUsers.query-repository';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Blog, Post, Comment, Likes, User])],
-  controllers: [BloggerController],
+  imports: [TypeOrmModule.forFeature([Blog, Post, Comment, Likes, User, BannedUsersEntity])],
+  controllers: [BloggerBlogsController],
   providers: [
     AuthService,
     BlogsRepository,
@@ -32,6 +37,7 @@ import { IsBannedForPostUseCase } from '../posts/use-cases/isBannedForPost.use-c
     PostsQueryRepository,
     LikesQueryRepository,
     UsersQueryRepository,
+    UsersRepository,
     CreateBlogUseCase,
     UpdateBlogUseCase,
     DeleteBlogUseCase,
@@ -39,6 +45,9 @@ import { IsBannedForPostUseCase } from '../posts/use-cases/isBannedForPost.use-c
     UpdatePostByBlogIdUseCase,
     DeletePostByBlogIdUseCase,
     IsBannedForPostUseCase,
+    BanUnbanUserUseCase,
+    BannedUsersRepository,
+    BannedUsersQueryRepository,
   ],
 })
 export class BloggerModule {}

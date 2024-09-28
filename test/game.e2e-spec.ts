@@ -20,6 +20,7 @@ describe('Testing Game', () => {
 
   let user1: userModel;
   let accessToken1: string;
+
   it('should create user1 and login user1 => 201 status', async () => {
     const newUser1 = await request(app.getHttpServer())
       .post('/sa/users')

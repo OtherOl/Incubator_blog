@@ -17,9 +17,11 @@ import { Likes } from '../likes/entities/likes.entity';
 import { Blog } from '../blogs/entities/blogs.entity';
 import { IsBannedForPostUseCase } from './use-cases/isBannedForPost.use-case';
 import { BlogsQueryRepository } from '../blogs/repositories/blogs.query-repository';
+import { BannedUsersQueryRepository } from '../blogger/repositories/bannedUsers.query-repository';
+import { BannedUsersEntity } from '../blogger/entities/bannedUsers.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Post, Comment, User, Likes, Blog])],
+  imports: [TypeOrmModule.forFeature([Post, Comment, User, Likes, Blog, BannedUsersEntity])],
   controllers: [PostsController],
   providers: [
     PostsQueryRepository,
@@ -33,6 +35,7 @@ import { BlogsQueryRepository } from '../blogs/repositories/blogs.query-reposito
     LikesQueryRepository,
     BlogsQueryRepository,
     IsBannedForPostUseCase,
+    BannedUsersQueryRepository,
   ],
 })
 export class PostsModule {}

@@ -8,7 +8,7 @@ import { sortDirectionHelper } from '../../common/helpers/sortDirection.helper';
 
 @Injectable()
 export class UsersQueryRepository {
-  constructor(@InjectRepository(User) private usersRepository: Repository<User>) {}
+  constructor(@InjectRepository(User) private readonly usersRepository: Repository<User>) {}
 
   async getAllUsers(
     sortBy: string = 'createdAt',

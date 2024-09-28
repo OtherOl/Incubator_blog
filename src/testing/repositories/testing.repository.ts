@@ -13,23 +13,26 @@ import { PairQuizGame } from '../../game/pairQuizGame/entities/pairQuizGame.enti
 import { QuizQuestions } from '../../game/quizQuestions/entities/quizQuestions.entity';
 import { Answer } from '../../game/pairQuizGame/entities/answers.entity';
 import { PlayerEntity } from '../../game/pairQuizGame/entities/player.entity';
+import { BannedUsersEntity } from '../../blogger/entities/bannedUsers.entity';
 
 @Injectable()
 export class TestingRepository {
   constructor(
-    @InjectRepository(AuthBlackList) private authBlackListRepository: Repository<AuthBlackList>,
+    @InjectRepository(AuthBlackList) private readonly authBlackListRepository: Repository<AuthBlackList>,
     @InjectRepository(AuthWhiteList)
-    private authWhiteListRepository: Repository<AuthWhiteList>,
-    @InjectRepository(Blog) private blogsRepository: Repository<Blog>,
-    @InjectRepository(User) private usersRepository: Repository<User>,
-    @InjectRepository(Security) private securityRepository: Repository<Security>,
-    @InjectRepository(Post) private postsRepository: Repository<Post>,
-    @InjectRepository(Likes) private likesRepository: Repository<Likes>,
-    @InjectRepository(Comment) private commentsRepository: Repository<Comment>,
-    @InjectRepository(PlayerEntity) private playerRepository: Repository<PlayerEntity>,
-    @InjectRepository(PairQuizGame) private pairQuizGameRepository: Repository<PairQuizGame>,
-    @InjectRepository(QuizQuestions) private quizQuestionsRepository: Repository<QuizQuestions>,
-    @InjectRepository(Answer) private answerRepository: Repository<Answer>,
+    private readonly authWhiteListRepository: Repository<AuthWhiteList>,
+    @InjectRepository(Blog) private readonly blogsRepository: Repository<Blog>,
+    @InjectRepository(User) private readonly usersRepository: Repository<User>,
+    @InjectRepository(Security) private readonly securityRepository: Repository<Security>,
+    @InjectRepository(Post) private readonly postsRepository: Repository<Post>,
+    @InjectRepository(Likes) private readonly likesRepository: Repository<Likes>,
+    @InjectRepository(Comment) private readonly commentsRepository: Repository<Comment>,
+    @InjectRepository(PlayerEntity) private readonly playerRepository: Repository<PlayerEntity>,
+    @InjectRepository(PairQuizGame) private readonly pairQuizGameRepository: Repository<PairQuizGame>,
+    @InjectRepository(QuizQuestions) private readonly quizQuestionsRepository: Repository<QuizQuestions>,
+    @InjectRepository(Answer) private readonly answerRepository: Repository<Answer>,
+    @InjectRepository(BannedUsersEntity)
+    private readonly bannedUsersRepository: Repository<BannedUsersEntity>,
   ) {}
 
   async clearDB() {
@@ -45,6 +48,7 @@ export class TestingRepository {
     await this.pairQuizGameRepository.delete({});
     await this.quizQuestionsRepository.delete({});
     await this.answerRepository.delete({});
+    await this.bannedUsersRepository.delete({});
     return;
   }
 }

@@ -29,7 +29,7 @@ import { DeletePostByBlogIdUseCase } from '../../blogs/use-cases/deletePostByBlo
 import { UsersQueryRepository } from '../../users/repositories/users.query-repository';
 
 @Controller('blogger/blogs')
-export class BloggerController {
+export class BloggerBlogsController {
   constructor(
     private readonly blogsQueryRepo: BlogsQueryRepository,
     private readonly usersQueryRepo: UsersQueryRepository,

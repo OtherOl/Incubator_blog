@@ -14,6 +14,7 @@ import { PlayerEntity } from '../game/pairQuizGame/entities/player.entity';
 import { PairQuizGame } from '../game/pairQuizGame/entities/pairQuizGame.entity';
 import { QuizQuestions } from '../game/quizQuestions/entities/quizQuestions.entity';
 import { Answer } from '../game/pairQuizGame/entities/answers.entity';
+import { BannedUsersEntity } from '../blogger/entities/bannedUsers.entity';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { Answer } from '../game/pairQuizGame/entities/answers.entity';
       PairQuizGame,
       QuizQuestions,
       Answer,
+      BannedUsersEntity,
     ]),
   ],
   controllers: [TestingController],

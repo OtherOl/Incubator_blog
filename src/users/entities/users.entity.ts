@@ -15,7 +15,7 @@ export class RecoveryConfirmation {
   expirationDate: string;
 }
 
-class BanUserInfo {
+export class BanUserInfo {
   isBanned: boolean;
   banDate: string | null;
   banReason: string | null;
