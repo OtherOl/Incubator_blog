@@ -25,10 +25,11 @@ import { UsersRepository } from '../users/repositories/users.repository';
 import { BannedUsersEntity } from './entities/bannedUsers.entity';
 import { BannedUsersRepository } from './repositories/bannedUsers.repository';
 import { BannedUsersQueryRepository } from './repositories/bannedUsers.query-repository';
+import { BloggerUsersController } from './controllers/blogger-users.controller';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Blog, Post, Comment, Likes, User, BannedUsersEntity])],
-  controllers: [BloggerBlogsController],
+  controllers: [BloggerBlogsController, BloggerUsersController],
   providers: [
     AuthService,
     BlogsRepository,
