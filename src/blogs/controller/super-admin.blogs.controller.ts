@@ -13,7 +13,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { BlogsQueryRepository } from '../repositories/blogs.query-repository';
-import { createBlogModel } from '../../common/types/blogs.model';
+import { banBlogInputModel, createBlogModel } from '../../common/types/blogs.model';
 import { PostsQueryRepository } from '../../posts/repositories/posts.query-repository';
 import { createBlogPostModel } from '../../common/types/posts.model';
 import { BasicAuthGuard } from '../../auth/guards/basic-auth.guard';
@@ -27,6 +27,7 @@ import { DeletePostByBlogIdUseCase } from '../use-cases/deletePostByBlogIdUseCas
 import { Request } from 'express';
 import { AuthService } from '../../auth/application/auth.service';
 import { UpdateBlogOwnerUseCase } from '../use-cases/updateBlogOwner.use-case';
+import { BanUnbanBlogUseCase } from '../use-cases/ban-unban-blog.use-case';
 
 @Controller('sa/blogs')
 export class SuperAdminBlogsController {
@@ -41,6 +42,7 @@ export class SuperAdminBlogsController {
     private readonly updatePostByBlogIdUseCase: UpdatePostByBlogIdUseCase,
     private readonly deletePostByBlogIdUseCase: DeletePostByBlogIdUseCase,
     private readonly updateBlogOwnerUseCase: UpdateBlogOwnerUseCase,
+    private readonly banUnbanBlogUseCase: BanUnbanBlogUseCase,
   ) {}
 
   @SkipThrottle()
@@ -75,6 +77,15 @@ export class SuperAdminBlogsController {
     return await this.updateBlogOwnerUseCase.update(id, userId);
   }
 
+  @SkipThrottle()
+  @UseGuards(BasicAuthGuard)
+  @Put(':id/ban')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async banUnbanBlog(@Param('id') id: string, @Body() inputData: banBlogInputModel) {
+    return await this.banUnbanBlogUseCase.banUnban(id, inputData.isBanned);
+  }
+
+  //Нижние эндпоинты подлежат удалению
   @SkipThrottle()
   @UseGuards(BasicAuthGuard)
   @Post()

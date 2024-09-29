@@ -50,6 +50,7 @@ export class BlogsQueryRepository {
           'b.createdAt',
           'b.isMembership',
           'b.blogOwnerInfo',
+          'b.banInfo',
         ])
         .where('b.name ilike :name', { name: `%${searchNameTerm}%` });
     } else {
@@ -75,17 +76,42 @@ export class BlogsQueryRepository {
         .getMany();
     }
 
+    let admittedBlogs: Blog[] = [];
+    let bannedBlogs: number = 0;
+
+    if (userId && userId === 'admin') {
+      admittedBlogs = foundedBlogs;
+    } else {
+      for (const blog of foundedBlogs) {
+        const fullBlog = await this.getFullBlogInfo(blog.id);
+        if (!fullBlog!.banInfo.isBanned) {
+          admittedBlogs.push(blog);
+        } else {
+          bannedBlogs++;
+        }
+      }
+    }
+
     return {
-      pagesCount: Math.ceil(Number(countedBlogs) / pageSize),
+      pagesCount: Math.ceil(Number(countedBlogs - bannedBlogs) / pageSize),
       page: pageNumber,
       pageSize: pageSize,
-      totalCount: Number(countedBlogs),
-      items: foundedBlogs,
+      totalCount: Number(countedBlogs) - bannedBlogs,
+      items: admittedBlogs,
     };
   }
 
   async getBlogById(id: string): Promise<blogViewModel | null> {
     return await this.blogsRepository.findOneBy({ id });
+  }
+
+  async getFullBlogInfo(id: string) {
+    return await this.blogsRepository
+      .createQueryBuilder('b')
+      .select('b')
+      .addSelect(['b.blogOwnerInfo', 'b.banInfo'])
+      .where({ id })
+      .getOne();
   }
 
   async getBlogByAdmin(id: string): Promise<adminBlogViewModel | null> {

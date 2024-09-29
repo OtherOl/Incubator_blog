@@ -46,4 +46,25 @@ export class BlogsRepository {
       .where('id = :blogId', { blogId })
       .execute();
   }
+
+  async banUnbanBlog(blogId: string, isBanned: boolean) {
+    await this.blogsRepository
+      .createQueryBuilder()
+      .update(Blog)
+      .set({
+        banInfo: () => `jsonb_set("banInfo", '{isBanned}', '${isBanned}')`,
+      })
+      .where('id = :blogId', { blogId })
+      .execute();
+
+    return await this.blogsRepository
+      .createQueryBuilder()
+      .update(Blog)
+      .set({
+        banInfo: () =>
+          `jsonb_set("banInfo", '{banDate}', '${isBanned ? `"${new Date().toISOString()}"` : null}')`,
+      })
+      .where('id = :blogId', { blogId })
+      .execute();
+  }
 }

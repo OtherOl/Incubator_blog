@@ -8,6 +8,11 @@ class blogOwnerInfo {
   userLogin: string | null;
 }
 
+class blogBanInfo {
+  isBanned: boolean;
+  banDate: string | null;
+}
+
 @Entity({ name: 'Blog' })
 export class Blog {
   @PrimaryColumn()
@@ -31,6 +36,9 @@ export class Blog {
   @Column({ nullable: false, select: false, type: 'jsonb' })
   blogOwnerInfo: blogOwnerInfo;
 
+  @Column({ nullable: false, select: false, type: 'jsonb' })
+  banInfo: blogBanInfo;
+
   @OneToMany(() => Post, (p) => p.blogsId, { onDelete: 'CASCADE' })
   posts: Post;
 
@@ -53,6 +61,10 @@ export class Blog {
         userLogin: null,
       };
     }
+    blog.banInfo = {
+      isBanned: false,
+      banDate: null,
+    };
     blog.isMembership = false;
 
     return blog;

@@ -24,6 +24,7 @@ import { UsersQueryRepository } from '../users/repositories/users.query-reposito
 import { User } from '../users/entities/users.entity';
 import { UpdateBlogOwnerUseCase } from './use-cases/updateBlogOwner.use-case';
 import { IsBannedForPostUseCase } from '../posts/use-cases/isBannedForPost.use-case';
+import { BanUnbanBlogUseCase } from './use-cases/ban-unban-blog.use-case';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Blog, Post, Comment, Likes, User])],
@@ -46,6 +47,7 @@ import { IsBannedForPostUseCase } from '../posts/use-cases/isBannedForPost.use-c
     BasicAuthGuard,
     BasicStrategy,
     IsBannedForPostUseCase,
+    BanUnbanBlogUseCase,
   ],
 })
 export class BlogsModule {}

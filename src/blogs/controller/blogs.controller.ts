@@ -68,6 +68,9 @@ export class BlogsController {
   async getBlogById(@Param('id') id: string) {
     const blog = await this.blogsQueryRepository.getBlogById(id);
     if (!blog) throw new NotFoundException("Blog doesn't exists");
+    const isBanned = await this.blogsQueryRepository.getFullBlogInfo(id);
+    if (isBanned!.banInfo.isBanned) throw new NotFoundException();
+
     return blog;
   }
 }

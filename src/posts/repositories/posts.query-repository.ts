@@ -12,6 +12,7 @@ import { Blog } from '../../blogs/entities/blogs.entity';
 import { IsBannedForPostUseCase } from '../use-cases/isBannedForPost.use-case';
 import { UsersQueryRepository } from '../../users/repositories/users.query-repository';
 import { Likes } from '../../likes/entities/likes.entity';
+import { BlogsQueryRepository } from '../../blogs/repositories/blogs.query-repository';
 
 @Injectable()
 export class PostsQueryRepository {
@@ -22,6 +23,7 @@ export class PostsQueryRepository {
     private readonly likesQueryRepository: LikesQueryRepository,
     private readonly isBannedForPostUseCase: IsBannedForPostUseCase,
     private readonly usersQueryRepo: UsersQueryRepository,
+    private readonly blogsQueryRepo: BlogsQueryRepository,
   ) {}
 
   async getCommentsByPostId(
@@ -181,6 +183,9 @@ export class PostsQueryRepository {
         .getOne();
       if (!isBelong) throw new ForbiddenException("Blog doesn't belong to you");
     }
+    const fullBlog = await this.blogsQueryRepo.getFullBlogInfo(blogId);
+    if (fullBlog?.banInfo.isBanned) throw new NotFoundException();
+
     const sortDir = sortDirectionHelper(sortDirection);
     const countPosts: number = await this.postsRepository
       .createQueryBuilder('p')

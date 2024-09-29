@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString, IsUrl, Length } from 'class-validator';
+import { IsBoolean, IsNotEmpty, IsString, IsUrl, Length } from 'class-validator';
 import { Transform, TransformFnParams } from 'class-transformer';
 import { applyDecorators } from '@nestjs/common';
 
@@ -22,6 +22,11 @@ export class createBlogModel {
   @IsUrl()
   @Length(1, 100)
   websiteUrl: string;
+}
+
+export class banBlogInputModel {
+  @IsBoolean()
+  isBanned: boolean;
 }
 
 export class blogViewModel {
