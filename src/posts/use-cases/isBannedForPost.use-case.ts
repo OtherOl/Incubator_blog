@@ -10,7 +10,8 @@ export class IsBannedForPostUseCase {
   ) {}
 
   async check(blogId: string) {
-    const blog = await this.blogsQueryRepo.getBlogByAdmin(blogId);
+    const blog = await this.blogsQueryRepo.getFullBlogInfo(blogId);
+    if (blog?.banInfo.isBanned) throw new NotFoundException();
     if (!blog?.blogOwnerInfo.userId) return;
     const user = await this.usersQueryRepo.getFullUserInfoById(blog?.blogOwnerInfo.userId);
     if (user?.banInfo.isBanned) throw new NotFoundException();
