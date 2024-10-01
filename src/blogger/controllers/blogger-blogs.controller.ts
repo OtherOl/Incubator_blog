@@ -27,6 +27,8 @@ import { PostsQueryRepository } from '../../posts/repositories/posts.query-repos
 import { UpdatePostByBlogIdUseCase } from '../../blogs/use-cases/updatePostByBlogId.use-case';
 import { DeletePostByBlogIdUseCase } from '../../blogs/use-cases/deletePostByBlogIdUseCase';
 import { UsersQueryRepository } from '../../users/repositories/users.query-repository';
+import { CommentsQueryRepository } from '../../comments/repositories/comments.query-repository';
+import { sortDirectionHelper } from '../../common/helpers/sortDirection.helper';
 
 @Controller('blogger/blogs')
 export class BloggerBlogsController {
@@ -41,7 +43,33 @@ export class BloggerBlogsController {
     private readonly postsQueryRepository: PostsQueryRepository,
     private readonly updatePostByBlogIdUseCase: UpdatePostByBlogIdUseCase,
     private readonly deletePostByBlogIdUseCase: DeletePostByBlogIdUseCase,
+    private readonly commentsQueryRepo: CommentsQueryRepository,
   ) {}
+
+  @SkipThrottle()
+  @Get('comments')
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(AccessTokenGuard)
+  async getAllComments(
+    @Req() req: Request,
+    @Query()
+    query: {
+      pageNumber: number;
+      pageSize: number;
+      sortBy: string;
+      sortDirection: string;
+    },
+  ) {
+    const userId: string = await this.authService.getUserIdByToken(req.headers.authorization!.split(' ')[1]);
+    const sortDir = sortDirectionHelper(query.sortDirection);
+    return await this.commentsQueryRepo.getAllComments(
+      userId,
+      query.pageNumber ? +query.pageNumber : 1,
+      query.pageSize ? +query.pageSize : 10,
+      query.sortBy,
+      sortDir,
+    );
+  }
 
   @SkipThrottle()
   @Get()

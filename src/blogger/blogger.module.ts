@@ -26,6 +26,8 @@ import { BannedUsersEntity } from './entities/bannedUsers.entity';
 import { BannedUsersRepository } from './repositories/bannedUsers.repository';
 import { BannedUsersQueryRepository } from './repositories/bannedUsers.query-repository';
 import { BloggerUsersController } from './controllers/blogger-users.controller';
+import { CommentsQueryRepository } from '../comments/repositories/comments.query-repository';
+import { IsBannedForCommentsUseCase } from '../comments/use-cases/isBannedForComments.use-case';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Blog, Post, Comment, Likes, User, BannedUsersEntity])],
@@ -49,6 +51,8 @@ import { BloggerUsersController } from './controllers/blogger-users.controller';
     BanUnbanUserUseCase,
     BannedUsersRepository,
     BannedUsersQueryRepository,
+    CommentsQueryRepository,
+    IsBannedForCommentsUseCase,
   ],
 })
 export class BloggerModule {}

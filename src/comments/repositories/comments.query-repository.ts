@@ -7,6 +7,7 @@ import { CommentViewModel } from '../../common/types/comments.model';
 import { IsBannedForCommentsUseCase } from '../use-cases/isBannedForComments.use-case';
 import { Likes } from '../../likes/entities/likes.entity';
 import { UsersQueryRepository } from '../../users/repositories/users.query-repository';
+import { LikesEnum } from '../../common/types/likes.model';
 
 @Injectable()
 export class CommentsQueryRepository {
@@ -74,6 +75,60 @@ export class CommentsQueryRepository {
         dislikesCount: comment.likesInfo.dislikesCount,
         myStatus: comment.likesInfo.myStatus,
       },
+    };
+  }
+
+  async getAllComments(
+    userId: string,
+    pageNumber: number,
+    pageSize: number,
+    sortBy: string = 'createdAt',
+    sortDirection: 'ASC' | 'DESC',
+  ) {
+    const comments = await this.commentsRepository
+      .createQueryBuilder('comment')
+      .innerJoin('comment.postsId', 'post')
+      .innerJoin('post.blogsId', 'blog')
+      .where(`blog.blogOwnerInfo ->> 'userId' = :userId`, { userId })
+      .andWhere(`blog.banInfo ->> 'isBanned' = :isBanned`, { isBanned: false })
+      .andWhere('post.id is not NULL')
+      .select([
+        'comment.id',
+        'comment.content',
+        'comment.commentatorInfo',
+        'comment.createdAt',
+        'comment.likesInfo',
+      ])
+      .addSelect(['post.id', 'post.title', 'post.blogId', 'post.blogName'])
+      .orderBy(`comment.${sortBy}`, sortDirection)
+      .limit(pageSize)
+      .offset((pageNumber - 1) * pageSize)
+      .getMany();
+
+    const updatedComments = await Promise.all(
+      comments.map(async (comment) => {
+        let likeStatus: string;
+        const like = await this.likesQueryRepository.getLikeByCommentId(userId, comment.id);
+        like ? (likeStatus = like.type) : (likeStatus = LikesEnum.None);
+        return {
+          ...comment,
+          likesInfo: {
+            myStatus: likeStatus,
+            likesCount: comment.likesInfo.likesCount,
+            dislikesCount: comment.likesInfo.dislikesCount,
+          },
+          postInfo: comment.postsId,
+          postsId: undefined,
+        };
+      }),
+    );
+
+    return {
+      pagesCount: Math.ceil(Number(updatedComments.length / pageSize)),
+      page: pageNumber,
+      pageSize: pageSize,
+      totalCount: Number(updatedComments.length),
+      items: updatedComments,
     };
   }
 }

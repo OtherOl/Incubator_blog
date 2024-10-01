@@ -40,7 +40,7 @@ export class Blog {
   banInfo: blogBanInfo;
 
   @OneToMany(() => Post, (p) => p.blogsId, { onDelete: 'CASCADE' })
-  posts: Post;
+  posts: Post[];
 
   static createNewBlog(inputData: createBlogModel, userId?: string, login?: string) {
     const blog = new Blog();

@@ -48,7 +48,7 @@ export class Post {
   likes: Likes;
 
   @OneToMany(() => Comment, (c) => c.postId, { onDelete: 'CASCADE' })
-  comments: Comment;
+  comments: Comment[];
 
   static createNewPost(
     title: string,
