@@ -85,6 +85,23 @@ export class CommentsQueryRepository {
     sortBy: string = 'createdAt',
     sortDirection: 'ASC' | 'DESC',
   ) {
+    const countComments = await this.commentsRepository
+      .createQueryBuilder('comment')
+      .innerJoin('comment.postsId', 'post')
+      .innerJoin('post.blogsId', 'blog')
+      .where(`blog.blogOwnerInfo ->> 'userId' = :userId`, { userId })
+      .andWhere(`blog.banInfo ->> 'isBanned' = :isBanned`, { isBanned: false })
+      .andWhere('post.id is not NULL')
+      .select([
+        'comment.id',
+        'comment.content',
+        'comment.commentatorInfo',
+        'comment.createdAt',
+        'comment.likesInfo',
+      ])
+      .addSelect(['post.id', 'post.title', 'post.blogId', 'post.blogName'])
+      .getCount();
+
     const comments = await this.commentsRepository
       .createQueryBuilder('comment')
       .innerJoin('comment.postsId', 'post')
@@ -124,10 +141,10 @@ export class CommentsQueryRepository {
     );
 
     return {
-      pagesCount: Math.ceil(Number(updatedComments.length / pageSize)),
+      pagesCount: Math.ceil(Number(countComments / pageSize)),
       page: pageNumber,
       pageSize: pageSize,
-      totalCount: Number(updatedComments.length),
+      totalCount: countComments,
       items: updatedComments,
     };
   }

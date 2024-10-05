@@ -54,7 +54,7 @@ const { PGHOST, PGDATABASE, PGUSER, PGPASSWORD } = process.env;
       global: true,
       secret: process.env.SECRET || '123',
     }),
-    ThrottlerModule.forRoot([{ ttl: 15000, limit: 6 }]),
+    ThrottlerModule.forRoot([{ ttl: 1000000, limit: 5000 }]),
     AuthModule,
     UsersModule,
     SecurityDevicesModule,
