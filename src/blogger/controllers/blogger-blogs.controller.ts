@@ -10,6 +10,7 @@ import {
   Put,
   Query,
   Req,
+  UnauthorizedException,
   UseGuards,
 } from '@nestjs/common';
 import { AccessTokenGuard } from '../../auth/guards/accessToken.guard';
@@ -104,6 +105,7 @@ export class BloggerBlogsController {
   async createBlog(@Body() inputData: createBlogModel, @Req() req: Request) {
     const userId = await this.authService.getUserIdForGet(req.headers.authorization!.split(' ')[1]);
     const user = await this.usersQueryRepo.getUserById(userId);
+    if (!user) throw new UnauthorizedException();
     return await this.createBlogUseCase.createBlog(inputData, userId, user!.login!);
   }
 
